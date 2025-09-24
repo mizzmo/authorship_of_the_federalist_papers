@@ -1,1 +1,1 @@
-# authorship_of_the_federalist_papers
+# Authorship of the Federalist Papers.
