@@ -5,9 +5,10 @@ import sklearn
 import pandas
 import matplotlib
 
-federalist_articles = {}
+
 
 def parse_federalist():
+    federalist_articles = {}
     with open("resources/the_federalist_papers.txt", "r") as file:
         articles = 0
         new_article = ""
@@ -23,6 +24,9 @@ def parse_federalist():
                 new_article = ""
                 # Skips the article number
                 continue
+            # Final line in The Federalist Papers
+            elif(line.strip() == "PUBLIUS"):
+                federalist_articles[articles] = new_article.strip()
             else:
                 # Ignore blank lines
                 if line.strip() == "":
@@ -35,6 +39,7 @@ def parse_federalist():
             file.write(f"{article_num}: {content}\n")       
             
 def make_dict():
+    federalist_articles = {}
     try:
         parse_federalist()
         print(f"Parsed {len(federalist_articles)} articles.")
@@ -49,11 +54,11 @@ def check_federalist_dict():
     try:
         with open("resources/federalist_articles_cleaned.txt", "r") as file:
             for line in file:
+                # Try to load the dictionary from the cleaned file
                 raw_article = line.split(": ", 1)
                 federalist_articles[int(raw_article[0])] = raw_article[1].strip()
-            if len(federalist_articles) != 84:
+            if len(federalist_articles) != 85:
                 print(f"Warning: Expected 85 articles, found {len(federalist_articles)}.")
-                parse_federalist()
                 return None
             else:
                 print("All articles successfully parsed.")
@@ -64,13 +69,25 @@ def check_federalist_dict():
         return None
                 
             
-if __name__ == "__main__":
+def get_federalist_dict():
+    # Get the corpus dictionary.
     federalist_articles = check_federalist_dict()
     if federalist_articles == None:
-        print("No articles loaded.")
+        print("Dictionary Load Unsuccessful, Re-parsing document.")
+        # Parse the original file again
+        parse_federalist()
+        # Try again to read the cleaned file
+        federalist_articles = check_federalist_dict()
+        if federalist_articles == None:
+            print("Error: Could not parse federalist articles.")
+            return None
+        else:
+            print("Dictionary Load Successful.")
+            return federalist_articles
     else:
-        print(f"Loaded {len(federalist_articles)+1} articles.")
-        print(federalist_articles[84])
+        print("Dictionary Load Successful.")
+        return federalist_articles
+    
         
             
 

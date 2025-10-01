@@ -1,6 +1,6 @@
 # Authorship of the Federalist Papers
 
-*Author: Toby Surtees*
+Author: Toby Surtees
 
 ## Problem Description
 
