@@ -65,3 +65,5 @@ Supervised learning seems like the best choice for this application, as we have 
 ## Credits
 
 All credit for 'The Federalist Papers' resource used in this project goes to <https://www.gutenberg.org/>, where the documents are available to download for free.
+
+The list of function words used in this project is credited to James O’Shea and is available at <https://semanticsimilarity.wordpress.com/function-word-lists/>.
