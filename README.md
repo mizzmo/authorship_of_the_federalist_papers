@@ -30,12 +30,16 @@ The aim of this project is to contribute to the research around the federalist p
 
 At the stage of writing, this will mostly consist of comparison and statistical analysis of the text by looking at other works of the authors and comparing writing style and commmonalities between each work, as well as other confirmed articles in the same paper.
 
-## Proposed Methodology
+## Notes on Methodology
 
 1. LLM or Bayesian Models - Research into this specific case has shown no significant performance improvement of using Large Language Models (LLMs) against more traditional Bayesian or Topical Models (3), suggesting the best route for this project is a more typical Bayesian approach.
 2. Feature Selection - In tasks like this one, where writing style is the main differentiator between authors, feature selection is critical in producing useful results. Previous approaches have included using only function words (3,4), less affected by subject matter and thus better for attributing authorship. Specifically, Topic Embeddings of Function Words have been shown to give the best attribution performance (3).
 3. Stylistic Signals - Looking beyond word frequency into stylistic signals such as rhetoric and discourse structure can help in article attribution (1), a potential path for exploring beyond statistical analysis.
 4. Types of Classification - Using multiple types of classification and combining the results can increase the robustness of results (5), so I should explore using more than one classification technique.
+
+## Language and Technique
+
+Python is the obvious choice for this project. I'm familiar with the language and it also includes many powerful libraries for NLP and text analysis. It also includes many testing tools for code correctness.
 
 ## References
 
