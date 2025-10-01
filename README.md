@@ -30,17 +30,24 @@ The aim of this project is to contribute to the research around the federalist p
 
 At the stage of writing, this will mostly consist of comparison and statistical analysis of the text by looking at other works of the authors and comparing writing style and commmonalities between each work, as well as other confirmed articles in the same paper.
 
-## Existing Research
+## Proposed Methodology
 
-Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
+1. LLM or Bayesian Models - Research into this specific case has shown no significant performance improvement of using Large Language Models (LLMs) against more traditional Bayesian or Topical Models (3), suggesting the best route for this project is a more typical Bayesian approach.
+2. Feature Selection - In tasks like this one, where writing style is the main differentiator between authors, feature selection is critical in producing useful results. Previous approaches have included using only function words (3,4), less affected by subject matter and thus better for attributing authorship. Specifically, Topic Embeddings of Function Words have been shown to give the best attribution performance (3).
+3. Stylistic Signals - Looking beyond word frequency into stylistic signals such as rhetoric and discourse structure can help in article attribution (1), a potential path for exploring beyond statistical analysis.
+4. Types of Classification - Using multiple types of classification and combining the results can increase the robustness of results (5), so I should explore using more than one classification technique.
 
-Fung, G. (2003) ‘The disputed federalist papers: SVM feature selection via concave minimization’, in Proceedings of the 2003 conference on Diversity in computing. TAPIA03: Richard Tapia Celebration of Diversity in Computing Conference, Atlanta Georgia USA: ACM, pp. 42–46. Available at: <https://doi.org/10.1145/948542.948551>.
+## References
 
-Jeong, S.W. and Ročková, V. (2025) ‘From Small to Large Language Models: Revisiting the Federalist Papers’. arXiv. Available at: <https://doi.org/10.48550/arXiv.2503.01869>.
+[1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
 
-Mosteller, F. and Wallace, D.L. (2012) Applied Bayesian and Classical Inference: The Case of The Federalist Papers. Springer Science & Business Media.
+[2]Fung, G. (2003) ‘The disputed federalist papers: SVM feature selection via concave minimization’, in Proceedings of the 2003 conference on Diversity in computing. TAPIA03: Richard Tapia Celebration of Diversity in Computing Conference, Atlanta Georgia USA: ACM, pp. 42–46. Available at: <https://doi.org/10.1145/948542.948551>.
 
-Savoy, J. (2013) ‘The Federalist Papers revisited: A collaborative attribution scheme’, Proceedings of the American Society for Information Science and Technology, 50(1), pp. 1–8. Available at: <https://doi.org/10.1002/meet.14505001036>.
+[3]Jeong, S.W. and Ročková, V. (2025) ‘From Small to Large Language Models: Revisiting the Federalist Papers’. arXiv. Available at: <https://doi.org/10.48550/arXiv.2503.01869>.
+
+[4]Mosteller, F. and Wallace, D.L. (2012, 1984) Applied Bayesian and Classical Inference: The Case of The Federalist Papers. Springer Science & Business Media.
+
+[5]Savoy, J. (2013) ‘The Federalist Papers revisited: A collaborative attribution scheme’, Proceedings of the American Society for Information Science and Technology, 50(1), pp. 1–8. Available at: <https://doi.org/10.1002/meet.14505001036>.
 
 ## Credits
 
