@@ -39,7 +39,16 @@ At the stage of writing, this will mostly consist of comparison and statistical 
 
 ## Language and Technique
 
-Python is the obvious choice for this project. I'm familiar with the language and it also includes many powerful libraries for NLP and text analysis. It also includes many testing tools for code correctness.
+Python is the obvious choice for this project. I'm familiar with the language, and it also includes many powerful libraries for NLP and text analysis. It also includes many testing tools for code correctness.
+
+Supervised learning seems like the best choice for this application, as we have plenty of options for other works attributed to each author, without disputes over authorship. This means I can compare these knowing for a fact who wrote them, and use them as a comparison to the disputed articles. This also works for other articles in The Federalist Papers where authorship is not contested. I will use both in this project.
+
+### Features
+
+1. Lexical Features - Average number of words per sentence, Sentence Length and Variation, Lexical Diversity.
+2. Punctuation Features - Average number of commas, semicolons and colons per sentence.
+3. Bag-of-Words (BoW) - Frequencies of different words in each article using *topic-independent* keywords for better analysis across different papers and subjects.
+4. Syntactic Features - Lexical categories and feature labelling, Part-of-Speech (POS).
 
 ## References
 
