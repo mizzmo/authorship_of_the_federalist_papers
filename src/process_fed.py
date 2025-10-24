@@ -5,7 +5,7 @@ import sklearn
 import pandas
 import matplotlib
 
-
+from federalist_authors_enum import FederalistAuthor
 
 def parse_federalist():
     federalist_articles = {}
@@ -33,10 +33,20 @@ def parse_federalist():
                     continue
                 else:
                     new_article +=  (" " + line.strip()).lower()
-
+                    
+    # Write with correct article number and attribution
     with open("resources/federalist_articles_cleaned.txt", "w") as file:
         for article_num, content in federalist_articles.items():
-            file.write(f"{article_num}: {content}\n")       
+            if article_num in FederalistAuthor.HAMILTON.value:
+                file.write(f"HAMILTON: {article_num}: {content}\n")
+            elif article_num in FederalistAuthor.MADISON.value:
+                file.write(f"MADISON: {article_num}: {content}\n")
+            elif article_num in FederalistAuthor.JAY.value:
+                file.write(f"JAY: {article_num}: {content}\n")
+            elif article_num in FederalistAuthor.DISPUTED.value:
+                file.write(f"DISPUTED: {article_num}: {content}\n")
+            else:
+                file.write(f"UNKNOWN: {article_num}: {content}\n")
             
 def make_dict():
     federalist_articles = {}
@@ -55,8 +65,8 @@ def check_federalist_dict():
         with open("resources/federalist_articles_cleaned.txt", "r") as file:
             for line in file:
                 # Try to load the dictionary from the cleaned file
-                raw_article = line.split(": ", 1)
-                federalist_articles[int(raw_article[0])] = raw_article[1].strip()
+                raw_article = line.split(": ", 2)
+                federalist_articles[int(raw_article[1])] = raw_article[2].strip()
             if len(federalist_articles) != 85:
                 print(f"Warning: Expected 85 articles, found {len(federalist_articles)}.")
                 return None
@@ -91,3 +101,4 @@ def get_federalist_dict():
         
             
 
+get_federalist_dict()

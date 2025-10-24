@@ -19,5 +19,4 @@ with open("resources/function_words_clean.txt", 'w') as file:
     for word in words:
         file.write(word + "\n")
     
-    
             
