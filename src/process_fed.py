@@ -61,18 +61,25 @@ def make_dict():
         
 def check_federalist_dict():
     federalist_articles = {}
+    author_dict = {}
     try:
         with open("resources/federalist_articles_cleaned.txt", "r") as file:
             for line in file:
                 # Try to load the dictionary from the cleaned file
                 raw_article = line.split(": ", 2)
+                # Numbered dictionary containing each article
                 federalist_articles[int(raw_article[1])] = raw_article[2].strip()
+                # Numbered dictionary containing each authors articles
+                author_dict[int(raw_article[1])] = str(raw_article[0])
             if len(federalist_articles) != 85:
                 print(f"Warning: Expected 85 articles, found {len(federalist_articles)}.")
                 return None
+            elif len(author_dict) != 85:
+                print(f"Warning: Expected 85 articles, found {len(author_dict)}.")
+                return None
             else:
                 print("All articles successfully parsed.")
-                return federalist_articles
+                return federalist_articles, author_dict
         
     except Exception as e:
         print(f"Error reading federalist articles: {e}")
