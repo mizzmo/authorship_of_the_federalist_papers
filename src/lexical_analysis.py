@@ -17,7 +17,7 @@ def clean_word_token(token: str):
     token = token.strip()
     # Remove tokens that are just numbers or punctuation.
     if token.isdigit():
-        return None
+        return None, None
     else:
         word = ""
         punctuation = {}
@@ -35,14 +35,17 @@ def clean_word_token(token: str):
                     punctuation[letter] += 1
                 else:
                     punctuation[letter] = 0
-                
-        return word, punctuation
+        if len(word) > 0:
+            return word, punctuation
+        else:
+            return None, punctuation
         
 
 def average_words():
     federalist_dict, author_dict = get_federalist_dict()
     # Get each article.
     for article_number, article in federalist_dict.items():
+        print(article_number)
         # Split the article into sentences.
         all_sentences = sent_tokenize(article)
         # Break down each sentence into words, remove punctuation.
@@ -51,18 +54,17 @@ def average_words():
             to_remove = []
             # Process each word, note down any that are to be removed and remove after processing the entire array.
             for i in range(len(words)):
-                cleaned_word = clean_word_token(words[i])
+                cleaned_word, token_punctuation = clean_word_token(words[i])
                 if cleaned_word == None:
                     to_remove.append(i)
                 else:
                     words[i] = cleaned_word
             # Remove the words marked for deletion
-            print(to_remove)
-            print(len(words))
+
             # Sort the list in reverse order and remove from back to front to prevent index error.
             for index in sorted(to_remove, reverse=True):
                 words.pop(index)
-                
+            
             print(words)
         break
             
