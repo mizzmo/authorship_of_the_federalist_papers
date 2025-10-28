@@ -79,23 +79,20 @@ def process_sentences(article):
     return output_array, output_punctuation
                 
 
-def average_words():
+def calculate_average_words(sentences):
+    running_total = 0
     # Calculate the average number of each sentence.
-    
-    # Produce metrics for each sentence
-    
-    # Corelate with names of Authors.
-    
-    # Produce separate results for each of the disputed papers
-    
-    # Overlay the results with the average for each author.    
-    return
+    for sentence in sentences:
+        running_total += len(sentence)
+    # Return the average number of words in all sentences.
+    return round(running_total / len(sentences), 2)
     
 # Graph the results by name
 
 # Get the initial dictionary.
 federalist_dict, author_dict = get_federalist_dict()
 
+average_words = []
 # Get each article.
 for article_number, article in federalist_dict.items():
     print("ARTICLE NUMBER:", article_number)
@@ -103,7 +100,15 @@ for article_number, article in federalist_dict.items():
     print(sentences)
     print("\n")
     print(punctuation)
+    # Add the average to the list.
+    average_words.append(calculate_average_words(sentences))
+    print(average_words)
     break
-
-
-average_words()
+        
+    # Produce metrics for each sentence
+    
+    # Corelate with names of Authors.
+    
+    # Produce separate results for each of the disputed papers
+    
+    # Overlay the results with the average for each author.    
