@@ -81,17 +81,19 @@ def check_federalist_dict():
                 author_dict[int(raw_article[1])] = str(raw_article[0])
             if len(federalist_articles) != 85:
                 print(f"Warning: Expected 85 articles, found {len(federalist_articles)}.")
-                return None
+                return None, None
             elif len(author_dict) != 85:
                 print(f"Warning: Expected 85 articles, found {len(author_dict)}.")
-                return None
+                return None, None
             else:
                 print("All articles successfully parsed.")
                 return federalist_articles, author_dict
         
     except Exception as e:
         print(f"Error reading federalist articles: {e}")
-        return None
+        return None, None
+    
+    return None, None
                 
             
 def get_federalist_dict():
@@ -102,10 +104,10 @@ def get_federalist_dict():
         # Parse the original file again
         parse_federalist()
         # Try again to read the cleaned file
-        federalist_articles = check_federalist_dict()
+        federalist_articles, author_dict = check_federalist_dict()
         if federalist_articles == None:
             print("Error: Could not parse federalist articles.")
-            return None
+            return None, None
         else:
             print("Dictionary Load Successful.")
             return federalist_articles, author_dict
