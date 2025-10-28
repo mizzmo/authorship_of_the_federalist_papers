@@ -12,9 +12,10 @@ def parse_federalist():
     with open("resources/the_federalist_papers.txt", "r") as file:
         articles = 0
         new_article = ""
+        start_of_article = False
         for line in file:
             # Finds the start of each article.
-            if line.startswith("FEDERALIST"):
+            if line.startswith("FEDERALIST"):                
                 # Save the previous article if it exists
                 if new_article and articles > 0:
                     federalist_articles[articles] = new_article.strip()
@@ -22,17 +23,24 @@ def parse_federalist():
                 articles += 1
                 # Erase prev article
                 new_article = ""
+                # Update start of article so we can skip the first lines that are not relevant.
+                start_of_article = False
                 # Skips the article number
                 continue
             # Final line in The Federalist Papers
             elif(line.strip() == "PUBLIUS"):
                 federalist_articles[articles] = new_article.strip()
             else:
-                # Ignore blank lines
-                if line.strip() == "":
+                # Only start recording lines if the correct point in the article has been hit.
+                if line.startswith("To the People of the State of New York:"):
+                    start_of_article = True
                     continue
-                else:
-                    new_article +=  (" " + line.strip()).lower()
+                if start_of_article:
+                    # Ignore blank lines
+                    if line.strip() == "":
+                        continue
+                    else:
+                        new_article +=  (" " + line.strip()).lower()
                     
     # Write with correct article number and attribution
     with open("resources/federalist_articles_cleaned.txt", "w") as file:
@@ -88,8 +96,8 @@ def check_federalist_dict():
             
 def get_federalist_dict():
     # Get the corpus dictionary.
-    federalist_articles = check_federalist_dict()
-    if federalist_articles == None:
+    federalist_articles, author_dict = check_federalist_dict()
+    if federalist_articles == None or author_dict == None:
         print("Dictionary Load Unsuccessful, Re-parsing document.")
         # Parse the original file again
         parse_federalist()
@@ -100,12 +108,10 @@ def get_federalist_dict():
             return None
         else:
             print("Dictionary Load Successful.")
-            return federalist_articles
+            return federalist_articles, author_dict
     else:
         print("Dictionary Load Successful.")
-        return federalist_articles
+        return federalist_articles, author_dict
     
         
-            
-
-get_federalist_dict()
+        
