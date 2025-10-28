@@ -85,30 +85,53 @@ def calculate_average_words(sentences):
     for sentence in sentences:
         running_total += len(sentence)
     # Return the average number of words in all sentences.
-    return round(running_total / len(sentences), 2)
+    if len(sentences) != 0:
+        return running_total / len(sentences)
+    else:
+        return 0
     
-# Graph the results by name
-
 # Get the initial dictionary.
 federalist_dict, author_dict = get_federalist_dict()
 
-average_words = []
+average_words = {}
 # Get each article.
 for article_number, article in federalist_dict.items():
-    print("ARTICLE NUMBER:", article_number)
-    sentences, punctuation = process_sentences(article)
-    print(sentences)
-    print("\n")
-    print(punctuation)
-    # Add the average to the list.
-    average_words.append(calculate_average_words(sentences))
-    print(average_words)
-    break
-        
     # Produce metrics for each sentence
+    sentences, punctuation = process_sentences(article)
+    # Add the average to the dictionary at corresponding article.
+    average_words[article_number] = calculate_average_words(sentences)
+
+
+# Corelate with names of Authors.
+author_average = {"HAMILTON" : [], "JAY" : [], "MADISON" : []}
+disputed_averages = {}
+# Using the author dictionary, work out the average number of words per sentence for each author.
+for article_number, word_average in average_words.items():
+    # Find the author of that article.
+    author = author_dict[article_number]
+        # Handle disputed articles separately.
+    if author != "DISPUTED":
+        # Add the average to that of the correct author.
+        author_average[author].append(word_average)
+    else:
+        disputed_averages[article_number] = round(word_average, 2)
+
+# Store averages
+total_averages = {} 
+# Go through each of the arrays, working out the average of the averages.
+for author, average_array in author_average.items():
+    running_total = 0
+    for average in average_array:
+        running_total += average
     
-    # Corelate with names of Authors.
-    
-    # Produce separate results for each of the disputed papers
-    
-    # Overlay the results with the average for each author.    
+    if len(average_array) != 0:
+        average_average = running_total / len(average_array)
+        total_averages[author] = round(average_average, 2)
+    else:
+        total_averages[author] = 0.00
+
+
+print(total_averages)
+print(disputed_averages)
+
+# Overlay the results with the average for each author.    
