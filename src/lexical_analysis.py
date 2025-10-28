@@ -34,40 +34,52 @@ def clean_word_token(token: str):
                 if letter in punctuation:
                     punctuation[letter] += 1
                 else:
-                    punctuation[letter] = 0
+                    punctuation[letter] = 1
         if len(word) > 0:
             return word, punctuation
         else:
             return None, punctuation
         
 
-def average_words():
-    federalist_dict, author_dict = get_federalist_dict()
-    # Get each article.
-    for article_number, article in federalist_dict.items():
-        print(article_number)
-        # Split the article into sentences.
-        all_sentences = sent_tokenize(article)
-        # Break down each sentence into words, remove punctuation.
-        for sentence in all_sentences:
-            words = word_tokenize(sentence)
-            to_remove = []
-            # Process each word, note down any that are to be removed and remove after processing the entire array.
-            for i in range(len(words)):
-                cleaned_word, token_punctuation = clean_word_token(words[i])
-                if cleaned_word == None:
-                    to_remove.append(i)
-                else:
-                    words[i] = cleaned_word
-            # Remove the words marked for deletion
+def process_sentences(article):
 
-            # Sort the list in reverse order and remove from back to front to prevent index error.
-            for index in sorted(to_remove, reverse=True):
-                words.pop(index)
-            
-            print(words)
-        break
-            
+    # Split the article into sentences.
+    all_sentences = sent_tokenize(article)
+    # Break down each sentence into words, remove punctuation.
+    output_array = []
+    output_punctuation = {}
+    for sentence in all_sentences:
+        words = word_tokenize(sentence)
+        to_remove = []
+        # Process each word, note down any that are to be removed and remove after processing the entire array.
+        for i in range(len(words)):
+            cleaned_word, token_punctuation = clean_word_token(words[i])
+            if cleaned_word == None:
+                to_remove.append(i)
+            else:
+                words[i] = cleaned_word
+                
+            # Tally up the punctuation for each sentence.
+            if token_punctuation:
+                for punctuation in token_punctuation:
+                    if punctuation in output_punctuation:
+                        output_punctuation[punctuation] += 1
+                    else:
+                        output_punctuation[punctuation] = 1
+        # Remove the words marked for deletion
+        # Sort the list in reverse order and remove from back to front to prevent index error.
+        for index in sorted(to_remove, reverse=True):
+            words.pop(index)
+        
+        # Add the processed sentence to the output array
+        output_array.append(words)
+
+        
+    
+    return output_array, output_punctuation
+                
+
+def average_words():
     # Calculate the average number of each sentence.
     
     # Produce metrics for each sentence
@@ -77,6 +89,21 @@ def average_words():
     # Produce separate results for each of the disputed papers
     
     # Overlay the results with the average for each author.    
+    return
     
 # Graph the results by name
+
+# Get the initial dictionary.
+federalist_dict, author_dict = get_federalist_dict()
+
+# Get each article.
+for article_number, article in federalist_dict.items():
+    print("ARTICLE NUMBER:", article_number)
+    sentences, punctuation = process_sentences(article)
+    print(sentences)
+    print("\n")
+    print(punctuation)
+    break
+
+
 average_words()
