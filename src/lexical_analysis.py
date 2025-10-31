@@ -8,6 +8,7 @@ import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
 import matplotlib.pyplot as plt
+import pandas as pd
 
 nltk.download('punkt_tab')
 
@@ -96,6 +97,28 @@ def calculate_average_words(sentences):
         return 0
     
     
+
+def plot_graph(averages, disputed_averages):
+    plt.close("all")
+    # Combine the two dictionaries
+    averages.update(disputed_averages)
+    
+    #  Create a DataFrame where Authors/Articles are the index and the average is the first column
+    frame = pd.DataFrame.from_dict(averages, orient='index', columns=['Average Words Per Sentence'])
+    print (frame)
+    
+    # Convert the index (Authors/Articles) into a column
+    frame = frame.reset_index()
+    
+    # Rename the column containing the Authors/Articles
+    frame = frame.rename(columns={'index': 'Author / Article'})
+    
+    frame.plot(kind="bar", x='Author / Article', y='Average Words Per Sentence', rot=90) 
+    plt.tight_layout() 
+    plt.savefig("average_words.png")
+    
+    
+    
 def main():    
     # Get the initial dictionary.
     federalist_dict, author_dict = get_federalist_dict()
@@ -142,4 +165,7 @@ def main():
     print(disputed_averages)
 
     # Overlay the results with the average for each author.    
+    plot_graph(total_averages, disputed_averages)
     # Use a Plotting library to visualize the results.
+
+main()
