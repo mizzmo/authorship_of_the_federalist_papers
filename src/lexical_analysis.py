@@ -10,7 +10,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 nltk.download('punkt_tab')
 
-from process_fed import get_federalist_dict
+from src.process_fed import get_federalist_dict
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -135,3 +135,4 @@ print(total_averages)
 print(disputed_averages)
 
 # Overlay the results with the average for each author.    
+# Use a Plotting library to visualize the results.
