@@ -7,10 +7,11 @@
 import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
+import matplotlib.pyplot as plt
 
 nltk.download('punkt_tab')
 
-from src.process_fed import get_federalist_dict
+from process_fed import get_federalist_dict
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -95,52 +96,50 @@ def calculate_average_words(sentences):
         return 0
     
     
-    
-    
-    
-# Get the initial dictionary.
-federalist_dict, author_dict = get_federalist_dict()
+def main():    
+    # Get the initial dictionary.
+    federalist_dict, author_dict = get_federalist_dict()
 
-average_words = {}
-# Get each article.
-for article_number, article in federalist_dict.items():
-    # Produce metrics for each sentence
-    sentences, punctuation = process_sentences(article)
-    # Add the average to the dictionary at corresponding article.
-    average_words[article_number] = calculate_average_words(sentences)
+    average_words = {}
+    # Get each article.
+    for article_number, article in federalist_dict.items():
+        # Produce metrics for each sentence
+        sentences, punctuation = process_sentences(article)
+        # Add the average to the dictionary at corresponding article.
+        average_words[article_number] = calculate_average_words(sentences)
 
 
-# Corelate with names of Authors.
-author_average = {"HAMILTON" : [], "JAY" : [], "MADISON" : []}
-disputed_averages = {}
-# Using the author dictionary, work out the average number of words per sentence for each author.
-for article_number, word_average in average_words.items():
-    # Find the author of that article.
-    author = author_dict[article_number]
-        # Handle disputed articles separately.
-    if author != "DISPUTED":
-        # Add the average to that of the correct author.
-        author_average[author].append(word_average)
-    else:
-        disputed_averages[article_number] = round(word_average, 2)
+    # Corelate with names of Authors.
+    author_average = {"HAMILTON" : [], "JAY" : [], "MADISON" : []}
+    disputed_averages = {}
+    # Using the author dictionary, work out the average number of words per sentence for each author.
+    for article_number, word_average in average_words.items():
+        # Find the author of that article.
+        author = author_dict[article_number]
+            # Handle disputed articles separately.
+        if author != "DISPUTED":
+            # Add the average to that of the correct author.
+            author_average[author].append(word_average)
+        else:
+            disputed_averages[article_number] = round(word_average, 2)
 
-# Store averages
-total_averages = {} 
-# Go through each of the arrays, working out the average of the averages.
-for author, average_array in author_average.items():
-    running_total = 0
-    for average in average_array:
-        running_total += average
-    
-    if len(average_array) != 0:
-        average_average = running_total / len(average_array)
-        total_averages[author] = round(average_average, 2)
-    else:
-        total_averages[author] = 0.00
+    # Store averages
+    total_averages = {} 
+    # Go through each of the arrays, working out the average of the averages.
+    for author, average_array in author_average.items():
+        running_total = 0
+        for average in average_array:
+            running_total += average
+        
+        if len(average_array) != 0:
+            average_average = running_total / len(average_array)
+            total_averages[author] = round(average_average, 2)
+        else:
+            total_averages[author] = 0.00
 
 
-print(total_averages)
-print(disputed_averages)
+    print(total_averages)
+    print(disputed_averages)
 
-# Overlay the results with the average for each author.    
-# Use a Plotting library to visualize the results.
+    # Overlay the results with the average for each author.    
+    # Use a Plotting library to visualize the results.

@@ -5,7 +5,7 @@ import sklearn
 import pandas
 import matplotlib
 
-from src.federalist_authors_enum import FederalistAuthor
+from federalist_authors_enum import FederalistAuthor
 
 def parse_federalist():
     federalist_articles = {}

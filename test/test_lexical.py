@@ -1,6 +1,6 @@
-from src.lexical_analysis import calculate_average_words
-from src.lexical_analysis import clean_word_token
-from src.lexical_analysis import process_sentences
+from lexical_analysis import calculate_average_words
+from lexical_analysis import clean_word_token
+from lexical_analysis import process_sentences
 
 def test_average_sentences():
     # Define test sentences

@@ -1,4 +1,4 @@
-import src.process_fed as pf
+import process_fed as pf
 
 def test_dict():
     dictionary = pf.get_federalist_dict()
