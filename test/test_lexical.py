@@ -1,5 +1,6 @@
 from src.lexical_analysis import calculate_average_words
 from src.lexical_analysis import clean_word_token
+from src.lexical_analysis import process_sentences
 
 def test_average_sentences():
     # Define test sentences
@@ -48,3 +49,24 @@ def test_number_and_letter_token():
     cleaned_token, punctuation = clean_word_token(token)
     assert cleaned_token == "times"
     assert punctuation == {'.' : 1}
+    
+    
+def test_process_sentences():
+    sentences = "16-Times the detail. 4-Times the size of FALLOUT 4!"
+    processed_sents, processed_punc = process_sentences(sentences)
+    assert processed_sents == [["times", "the", "detail"],["times", "the", "size", "of", "fallout"]]
+    assert processed_punc == {'-' : 2, '.' : 1, '!' : 1}
+    
+    
+def test_process_sentences_no_sentence():
+    sentences = ""
+    processed_sents, processed_punc = process_sentences(sentences)
+    assert processed_sents == []
+    assert processed_punc == {}
+    
+    
+def test_process_sentences_numbers():
+    sentences = "123456. 54321"
+    processed_sents, processed_punc = process_sentences(sentences)
+    assert processed_sents == []
+    assert processed_punc == {'.' : 1}

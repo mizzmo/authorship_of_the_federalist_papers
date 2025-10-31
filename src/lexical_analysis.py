@@ -75,7 +75,8 @@ def process_sentences(article):
             words.pop(index)
         
         # Add the processed sentence to the output array
-        output_array.append(words)
+        if len(words) > 0:
+            output_array.append(words)
 
         
     
