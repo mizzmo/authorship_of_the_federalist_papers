@@ -15,7 +15,9 @@ from src.process_fed import get_federalist_dict
 def clean_word_token(token: str):
     # Remove whitespace
     token = token.strip()
-    # Remove tokens that are just numbers or punctuation.
+    # Convert to lowercase.
+    token = token.lower()
+    # Remove tokens that are just numbers
     if token.isdigit():
         return None, None
     else:
@@ -28,8 +30,8 @@ def clean_word_token(token: str):
             if letter.isalpha():
                 # Add the letter to the word if it is alphanumerical
                 word = word + letter
-            # If the letter is not a number
-            elif not letter.isdigit():
+            # If the letter is not a number or whitespace
+            elif not letter.isdigit() and not letter == ' ':
                 # Add it to the tally.
                 if letter in punctuation:
                     punctuation[letter] += 1
@@ -37,12 +39,13 @@ def clean_word_token(token: str):
                     punctuation[letter] = 1
         if len(word) > 0:
             return word, punctuation
-        else:
+        elif len(punctuation) > 0:
             return None, punctuation
+        else:
+            return None, None
         
 
 def process_sentences(article):
-
     # Split the article into sentences.
     all_sentences = sent_tokenize(article)
     # Break down each sentence into words, remove punctuation.
@@ -89,6 +92,10 @@ def calculate_average_words(sentences):
         return running_total / len(sentences)
     else:
         return 0
+    
+    
+    
+    
     
 # Get the initial dictionary.
 federalist_dict, author_dict = get_federalist_dict()
