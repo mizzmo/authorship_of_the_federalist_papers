@@ -219,8 +219,12 @@ def main():
     
     total_averages = format_averages(average_words, author_dict)
     total_punctuation = format_punctuation(punctuation_per_article, author_dict)
-    # Overlay the results with the average for each author.    
+    # Plot the average data in a bar graph.
     #plot_graph(total_averages, disputed_averages)
-    # Use a Plotting library to visualize the results.
 
 main()
+
+# TODO Need to normalize the data as it means nothing in the current context.
+# TODO Normalize punctuation by dividing each data point by the number of words in the associated sentence. This gets a more fair comparison between sentences.
+# TODO Use Euclidean Distance and Cosine Similarity to compare data between authors. Doing this gets a more useful distance score for comparison.
+# TODO Visualize the data using Principal Component Analysis (PCA) to get a better grasp of where the data falls when in 2D space.
