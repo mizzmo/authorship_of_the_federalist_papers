@@ -165,7 +165,7 @@ def main():
     print(disputed_averages)
 
     # Overlay the results with the average for each author.    
-    plot_graph(total_averages, disputed_averages)
+    #plot_graph(total_averages, disputed_averages)
     # Use a Plotting library to visualize the results.
 
 main()
