@@ -135,23 +135,7 @@ def additive_combine_dictionaries(target_dict, source_dict):
     return target_dict
     
 
-def format_avereages(average_words):
-    return
-    
-def main():    
-    # Get the initial dictionary.
-    federalist_dict, author_dict = get_federalist_dict()
-    # Store the average number of words per article and total punctuation appearances per article.
-    average_words, total_punctuation = {}, {}
-    # Get each article.
-    for article_number, article in federalist_dict.items():
-        # Produce metrics for each sentence
-        sentences, punctuation = process_sentences(article)
-        # Add the average to the dictionary at corresponding article.
-        average_words[article_number] = calculate_average_words(sentences)
-        total_punctuation[article_number] = punctuation
-
-
+def format_averages(average_words, author_dict):
     # Corelate with names of Authors.
     author_average = {"HAMILTON" : [], "JAY" : [], "MADISON" : []}
     disputed_averages = {}
@@ -166,21 +150,7 @@ def main():
             author_average[author].append(word_average)
         else:
             disputed_averages[article_number] = round(word_average, 2)
-
-    # Work out the total punctuation used across all associated articles per author.
-    punc_per_author = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
-    disputed_punc = {}
-    for article_number, punc_dict in total_punctuation.items():
-        # Find the author of the article in question
-        author = author_dict[article_number]
-        if author != "DISPUTED":
-            # Update the dictionary in the entry with the new values.
-            punc_per_author[author] = additive_combine_dictionaries(punc_per_author[author], punc_dict)
-        else:
-            disputed_punc[article_number] = punc_dict
-    
-    
-    
+            
     
     # Store averages
     total_averages = {}
@@ -196,11 +166,44 @@ def main():
             total_averages[author] = round(average_average, 2)
         else:
             total_averages[author] = 0.00
+            
+    return total_averages
+            
+            
+def format_punctuation(punctuation_per_article, author_dict):
+    # Work out the total punctuation used across all associated articles per author.
+    punctuation_per_author = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
+    disputed_punctuation = {}
+    for article_number, punctuation_dict in punctuation_per_article.items():
+        # Find the author of the article in question
+        author = author_dict[article_number]
+        if author != "DISPUTED":
+            # Update the dictionary in the entry with the new values.
+            punctuation_per_author[author] = additive_combine_dictionaries(punctuation_per_author[author], punctuation_dict)
+        else:
+            disputed_punctuation[article_number] = punctuation_dict
+            
+    print(punctuation_per_author)
 
-
-    print(punc_per_author)
     
+    
+    
+def main():    
+    # Get the initial dictionary.
+    federalist_dict, author_dict = get_federalist_dict()
+    # Store the average number of words per article and total punctuation appearances per article.
+    average_words, punctuation_per_article = {}, {}
+    # Get each article.
+    for article_number, article in federalist_dict.items():
+        # Produce metrics for each sentence
+        sentences, punctuation = process_sentences(article)
+        # Add the average to the dictionary at corresponding article.
+        average_words[article_number] = calculate_average_words(sentences)
+        punctuation_per_article[article_number] = punctuation
 
+    
+    total_averages = format_averages(average_words, author_dict)
+    total_punctuation = format_punctuation(punctuation_per_article, author_dict)
     # Overlay the results with the average for each author.    
     #plot_graph(total_averages, disputed_averages)
     # Use a Plotting library to visualize the results.
