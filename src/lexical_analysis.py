@@ -13,6 +13,7 @@ import pandas as pd
 nltk.download('punkt_tab')
 
 from process_fed import get_federalist_dict
+from federalist_authors_enum import FederalistAuthor
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -183,9 +184,23 @@ def format_punctuation(punctuation_per_article, author_dict):
         else:
             disputed_punctuation[article_number] = punctuation_dict
             
-    print(punctuation_per_author)
-
+    # Articles per author
+    number_articles_per_author = {"HAMILTON" : len(FederalistAuthor.HAMILTON.value), "JAY" : len(FederalistAuthor.JAY.value), "MADISON" : len(FederalistAuthor.MADISON.value)}
     
+    average_punctuation = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
+    # Calculate the average usage of punctuation per author.
+    for author, punctuation in punctuation_per_author.items():
+        # Divide each type of punctuation by the total number of articles for that author.
+        no_articles = number_articles_per_author[author]
+        for symbol, symbol_count in punctuation.items():
+            if symbol_count > 0:
+                average_punctuation[author][symbol] = round(symbol_count / no_articles, 2)
+                
+    for article_no, punctuation in disputed_punctuation.items():
+        average_punctuation[article_no] = punctuation
+    
+    for key in average_punctuation.keys():
+        print(key, average_punctuation[key])
     
     
 def main():    
