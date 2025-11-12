@@ -54,6 +54,7 @@ def process_sentences(article):
     # Break down each sentence into words, remove punctuation.
     output_array = []
     output_punctuation = {}
+    word_count = 0
     for sentence in all_sentences:
         words = word_tokenize(sentence)
         to_remove = []
@@ -64,6 +65,7 @@ def process_sentences(article):
                 to_remove.append(i)
             else:
                 words[i] = cleaned_word
+                word_count += 1
                 
             # Tally up the punctuation for each sentence.
             if token_punctuation:
@@ -76,12 +78,17 @@ def process_sentences(article):
         # Sort the list in reverse order and remove from back to front to prevent index error.
         for index in sorted(to_remove, reverse=True):
             words.pop(index)
+            word_count -= 1
         
         # Add the processed sentence to the output array
         if len(words) > 0:
             output_array.append(words)
 
-        
+    # Normalize the punctuation data by dividing by the total number of words in the article.
+    for key, value in output_punctuation.items():
+        output_punctuation[key] = value / word_count
+    
+    #print(output_punctuation)
     
     return output_array, output_punctuation
                 
@@ -122,7 +129,7 @@ def plot_graph(averages, disputed_averages):
 def additive_combine_dictionaries(target_dict, source_dict):
     # Combine dictionaries by adding the values of the source to the values in the target.
     for key, value in source_dict.items():
-        if type(value) == int:
+        if type(value) == float:
             # Check if the key is in the target
             if key in target_dict.keys():
                 # Update the value by adding the source.
@@ -172,35 +179,26 @@ def format_averages(average_words, author_dict):
             
             
 def format_punctuation(punctuation_per_article, author_dict):
-    # Work out the total punctuation used across all associated articles per author.
-    punctuation_per_author = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
-    disputed_punctuation = {}
+    # For each article, form lists of normalized punctuation appearances for each type of punctuation.
+    average_punctuations = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
     for article_number, punctuation_dict in punctuation_per_article.items():
         # Find the author of the article in question
         author = author_dict[article_number]
-        if author != "DISPUTED":
-            # Update the dictionary in the entry with the new values.
-            punctuation_per_author[author] = additive_combine_dictionaries(punctuation_per_author[author], punctuation_dict)
-        else:
-            disputed_punctuation[article_number] = punctuation_dict
-            
-    # Articles per author
-    number_articles_per_author = {"HAMILTON" : len(FederalistAuthor.HAMILTON.value), "JAY" : len(FederalistAuthor.JAY.value), "MADISON" : len(FederalistAuthor.MADISON.value)}
+        if author != "DISPUTED":            
+            if author in average_punctuations.keys():
+                for punctuation, average in punctuation_dict.items():
+                    if punctuation in average_punctuations[author].keys():
+                        average_punctuations[author][punctuation].append(average)
+                    else:
+                        average_punctuations[author][punctuation] = [average]
     
-    average_punctuation = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
-    # Calculate the average usage of punctuation per author.
-    for author, punctuation in punctuation_per_author.items():
-        # Divide each type of punctuation by the total number of articles for that author.
-        no_articles = number_articles_per_author[author]
-        for symbol, symbol_count in punctuation.items():
-            if symbol_count > 0:
-                average_punctuation[author][symbol] = round(symbol_count / no_articles, 2)
+    print(average_punctuations)
                 
-    for article_no, punctuation in disputed_punctuation.items():
-        average_punctuation[article_no] = punctuation
-    
-    for key in average_punctuation.keys():
-        print(key, average_punctuation[key])
+            
+        
+        
+        
+
     
     
 def main():    
@@ -216,7 +214,6 @@ def main():
         average_words[article_number] = calculate_average_words(sentences)
         punctuation_per_article[article_number] = punctuation
 
-    
     total_averages = format_averages(average_words, author_dict)
     total_punctuation = format_punctuation(punctuation_per_article, author_dict)
     # Plot the average data in a bar graph.
