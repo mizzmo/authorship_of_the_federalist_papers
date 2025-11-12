@@ -181,6 +181,7 @@ def format_averages(average_words, author_dict):
 def format_punctuation(punctuation_per_article, author_dict):
     # For each article, form lists of normalized punctuation appearances for each type of punctuation.
     average_punctuations = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
+    disputed_averages = {}
     for article_number, punctuation_dict in punctuation_per_article.items():
         # Find the author of the article in question
         author = author_dict[article_number]
@@ -191,9 +192,26 @@ def format_punctuation(punctuation_per_article, author_dict):
                         average_punctuations[author][punctuation].append(average)
                     else:
                         average_punctuations[author][punctuation] = [average]
+        else:
+            disputed_averages[article_number] = punctuation_dict
     
-    print(average_punctuations)
+    
+    output_dict = {"HAMILTON" : {}, "JAY" : {}, "MADISON" : {}}
+    # For each author, work out the average of all normalised punctuation appearances.
+    for author in average_punctuations.keys():
+        for punctuation_type, averages in average_punctuations[author].items():
+            total = 0
+            for value in averages:
+                total += value
+            average_norm = total / len(averages)
+            output_dict[author][punctuation_type] = average_norm
+    
+    for line in output_dict:
+        print("\n")
+        print(output_dict[line])
+            
                 
+                            
             
         
         
