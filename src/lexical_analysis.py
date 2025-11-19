@@ -153,7 +153,7 @@ def format_averages(average_words, author_dict):
         else:
             total_averages[author] = 0.00
             
-    return total_averages
+    return total_averages, disputed_averages
             
             
 def format_punctuation(punctuation_per_article, author_dict):
@@ -200,10 +200,10 @@ def main():
         average_words[article_number] = calculate_average_words(sentences)
         punctuation_per_article[article_number] = punctuation
 
-    total_averages = format_averages(average_words, author_dict)
+    total_averages, disputed_averages = format_averages(average_words, author_dict)
     total_punctuation, disputed_punctuation = format_punctuation(punctuation_per_article, author_dict)
     # Plot the average data in a bar graph.
-    #plot_graph(total_averages, disputed_averages)
+    plot_averages(total_averages, disputed_averages)
     plot_punctuation(total_punctuation, disputed_punctuation)
 
 main()
