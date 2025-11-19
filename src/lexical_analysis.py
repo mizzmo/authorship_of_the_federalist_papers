@@ -7,7 +7,7 @@
 import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
-
+import pandas as pd
 
 nltk.download('punkt_tab')
 
@@ -194,9 +194,37 @@ def format_punctuation(punctuation_per_article, author_dict):
     return output_dict, disputed_averages
 
 
-def absolute_difference(input_dict, disputed_dict):
-    for punctuation_type in input_dict.keys():
-        print(punctuation_type)
+def absolute_difference(author_averages, disputed_dicts):
+    # Calculate the absolute difference between the mean of each type of punctuation and the mean of every disputed punctuation.
+    # Store the values for TAD and individual AD for every disputed article and each contained punctuation type.
+    results_by_article = {}
+
+    # Iterate over each disputed article 
+    for article, article_data in disputed_dicts.items():
+        # Dictionary to store differences for the current article
+        article_differences = {}
+        total_absolute_difference = 0
+        # Iterate over the author's mean punctuation
+        for punc, mean_value in author_averages.items():
+            
+            # Check if the punctuation is present in the current article
+            if punc in article_data:
+                article_frequency = article_data[punc]
+                
+                # Calculate Absolute Difference: |X - μ|
+                absolute_diff = abs(article_frequency - mean_value)
+                
+                article_differences[punc] = absolute_diff
+                # Sum the differences for Total Absolute Difference, TAD
+                total_absolute_difference += absolute_diff 
+        
+        # Store the total distance for this article against the current author
+        article_differences['TAD'] = total_absolute_difference
+        
+        # Store the complete results for the article
+        results_by_article[article] = article_differences
+    return results_by_article
+            
 
 def main():    
     # Get the initial dictionary.
@@ -214,8 +242,47 @@ def main():
     total_averages, disputed_averages = format_averages(average_words, author_dict)
     total_punctuation, disputed_punctuation = format_punctuation(punctuation_per_article, author_dict)
     # Plot the average data in a bar graph.
-    plot_averages(total_averages, disputed_averages)
-    plot_punctuation(total_punctuation, disputed_punctuation)
+    #plot_averages(total_averages, disputed_averages)
+    #plot_punctuation(total_punctuation, disputed_punctuation)
+    combined_rows = []
+
+    for author in total_punctuation.keys():
+        result_dict = absolute_difference(total_punctuation[author], disputed_punctuation)
+        
+        # Convert dict → DF, orient so each disputed article becomes a row
+        df = pd.DataFrame.from_dict(result_dict, orient='index')
+        
+        # Label rows with the author
+        df['author'] = author
+        
+        combined_rows.append(df)
+
+    # Final combined dataframe
+    data_frame = pd.concat(combined_rows).reset_index().rename(columns={'index': 'article'})
+    
+    # Write to file
+    with open('src/punc_graphs/total_absolute_difference_raw.txt', 'w') as f:
+        f.write(data_frame.to_string())
+    
+    # Create the wide comparison table using only the TAD column
+    df_comparison = data_frame.pivot(index='article', columns='author', values='TAD')
+
+    # Rename columns
+    df_comparison.columns = [f'{col}_TAD' for col in df_comparison.columns]
+    
+    # Find the author with the lowest TAD, hence the most similar.
+    # Find all TAD Columns.
+    tad_columns = df_comparison.filter(like="TAD").columns
+    # Add a column to hold the best match.
+    # Find the column name of the column holding the minimum value in that row.
+    df_comparison['Best Match'] = df_comparison[tad_columns].idxmin(axis = 1)
+    # Replace TAD with nothing to clean up the output.
+    df_comparison['Best Match'] = df_comparison['Best Match'].str.replace('_TAD', '')
+    
+    # Store the result in a txt file
+    with open('src/punc_graphs/total_absolute_difference.txt', 'w') as f:
+        f.write(df_comparison.to_string())
+
 
 main()
 
