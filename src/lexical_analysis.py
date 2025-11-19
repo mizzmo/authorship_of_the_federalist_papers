@@ -192,7 +192,11 @@ def format_punctuation(punctuation_per_article, author_dict):
             disputed_averages[article][punctuation] = disputed_averages[article][punctuation] * 100
         
     return output_dict, disputed_averages
-            
+
+
+def absolute_difference(input_dict, disputed_dict):
+    for punctuation_type in input_dict.keys():
+        print(punctuation_type)
 
 def main():    
     # Get the initial dictionary.
