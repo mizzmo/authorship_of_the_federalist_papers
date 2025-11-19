@@ -17,7 +17,7 @@ def plot_averages(averages, disputed_averages):
         
     frame.plot(kind='bar', x='Author / Article', y='Average Words Per Sentence', rot=90) 
     plt.tight_layout() 
-    plt.savefig("average_words.png")
+    plt.savefig("src/average_graphs/average_words.png")
     
     
 def plot_punctuation(punctuation, disputed_punctuation):
@@ -25,11 +25,18 @@ def plot_punctuation(punctuation, disputed_punctuation):
     # Combine the two dictionaries into a single dict
     punctuation.update(disputed_punctuation)
     
-    data_frames = []
+    max_average = 0
     # Create a separate dataframe for each author, where each punctuation type is on the x axis and the average usage is on the y axis.
     for key in punctuation.keys():
         # Create dataframe from dictionary.
         df = pd.DataFrame.from_dict(punctuation[key], orient='index', columns=['Average Appearances'])
+        # Sort by highest to lowest average
+        df = df.sort_values(by='Average Appearances', ascending=False)
+        df_max = df.max().iloc[0]
+        print(df_max)
+        if df_max > max_average:
+            max_average = df_max
+            
         # Use the default dataframe index rather than using punctuation to index.
         df = df.reset_index()
         # Rename the column containing the punctuation accordingly.
@@ -38,6 +45,8 @@ def plot_punctuation(punctuation, disputed_punctuation):
         df.plot(kind='barh', x ='Character', y ='Average Appearances', rot=90, title= 'Average Punctuation Usage Across All Articles: ' + str(key))
         plt.tight_layout() 
         # Save the plot with the correct name.
-        plt.savefig("punc_graphs/average_punc_" + str(key) + ".png")
+        #plt.savefig("src/punc_graphs/average_punc_" + str(key) + ".png")
+    
+    print(max_average)
         
     

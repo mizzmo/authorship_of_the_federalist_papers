@@ -182,8 +182,15 @@ def format_punctuation(punctuation_per_article, author_dict):
             for value in averages:
                 total += value
             average_norm = total / len(averages)
+            # Average per 100 words
+            average_norm *= 100
             output_dict[author][punctuation_type] = average_norm
-    
+            
+    for article, punc_array in disputed_averages.items():
+        for punctuation in punc_array:
+            # Multiply by 100 to be per 100 words.
+            disputed_averages[article][punctuation] = disputed_averages[article][punctuation] * 100
+        
     return output_dict, disputed_averages
             
 
