@@ -7,13 +7,13 @@
 import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
-import matplotlib.pyplot as plt
-import pandas as pd
+
 
 nltk.download('punkt_tab')
 
 from process_fed import get_federalist_dict
 from federalist_authors_enum import FederalistAuthor
+from graphing import plot_averages, plot_punctuation
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -104,28 +104,6 @@ def calculate_average_words(sentences):
     else:
         return 0
     
-    
-
-def plot_graph(averages, disputed_averages):
-    plt.close("all")
-    # Combine the two dictionaries
-    averages.update(disputed_averages)
-    
-    #  Create a DataFrame where Authors/Articles are the index and the average is the first column
-    frame = pd.DataFrame.from_dict(averages, orient='index', columns=['Average Words Per Sentence'])
-    print (frame)
-    
-    # Convert the index (Authors/Articles) into a column
-    frame = frame.reset_index()
-    
-    # Rename the column containing the Authors/Articles
-    frame = frame.rename(columns={'index': 'Author / Article'})
-    
-    frame.plot(kind="bar", x='Author / Article', y='Average Words Per Sentence', rot=90) 
-    plt.tight_layout() 
-    plt.savefig("average_words.png")
-    
-    
 def additive_combine_dictionaries(target_dict, source_dict):
     # Combine dictionaries by adding the values of the source to the values in the target.
     for key, value in source_dict.items():
@@ -206,19 +184,9 @@ def format_punctuation(punctuation_per_article, author_dict):
             average_norm = total / len(averages)
             output_dict[author][punctuation_type] = average_norm
     
-    for line in output_dict:
-        print("\n")
-        print(output_dict[line])
+    return output_dict, disputed_averages
             
-                
-                            
-            
-        
-        
-        
 
-    
-    
 def main():    
     # Get the initial dictionary.
     federalist_dict, author_dict = get_federalist_dict()
@@ -233,9 +201,10 @@ def main():
         punctuation_per_article[article_number] = punctuation
 
     total_averages = format_averages(average_words, author_dict)
-    total_punctuation = format_punctuation(punctuation_per_article, author_dict)
+    total_punctuation, disputed_punctuation = format_punctuation(punctuation_per_article, author_dict)
     # Plot the average data in a bar graph.
     #plot_graph(total_averages, disputed_averages)
+    plot_punctuation(total_punctuation, disputed_punctuation)
 
 main()
 
