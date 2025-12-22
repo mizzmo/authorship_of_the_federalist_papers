@@ -229,6 +229,7 @@ def absolute_difference(author_averages, disputed_dicts):
 def main():    
     # Get the initial dictionary.
     federalist_dict, author_dict = get_federalist_dict()
+    
     # Store the average number of words per article and total punctuation appearances per article.
     average_words, punctuation_per_article = {}, {}
     # Get each article.
@@ -244,6 +245,8 @@ def main():
     # Plot the average data in a bar graph.
     #plot_averages(total_averages, disputed_averages)
     #plot_punctuation(total_punctuation, disputed_punctuation)
+    print(disputed_averages)
+    pass
     combined_rows = []
 
     for author in total_punctuation.keys():
@@ -259,7 +262,7 @@ def main():
 
     # Final combined dataframe
     data_frame = pd.concat(combined_rows).reset_index().rename(columns={'index': 'article'})
-    
+    1000
     # Write to file
     with open('src/punc_graphs/total_absolute_difference_raw.txt', 'w') as f:
         f.write(data_frame.to_string())

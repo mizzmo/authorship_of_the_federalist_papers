@@ -50,6 +50,40 @@ Supervised learning seems like the best choice for this application, as we have 
 3. *Bag-of-Words* (BoW) - Frequencies of different words in each article using *topic-independent* keywords for better analysis across different papers and subjects.
 4. *Syntactic Features* - Lexical categories and feature labelling, Part-of-Speech (POS).
 
+## Data Structures
+
+### Stylistic Analysis
+
+Name: federalist_dict
+Type: Dict (Int : Str)
+Purpose: Holds each unprocessed article indexed to its corresponding article number. For example, Article 1 is stored at Key 1.
+Example: {1, "after an unequivocal experience of the inefficacy of the subsisting federal government, you are called upon to deliberate on a new constitution for..."}
+
+Name: author_dict
+Type: Dict (Int : Str)
+Purpose: Stores each article number and corresponding author. In the case that an article is disputed, the author is marked as Disputed.
+Example: {1: 'HAMILTON', 2: 'JAY', 3: 'JAY', 4}
+
+Name: total_punctuation
+Type: Dict(Str : {Dict(Char : Float)})
+Purpose: For each author, stores the normalized average punctuation usage for each punctuation that occurs, across all articles attributed to that author.
+Example: {'HAMILTON': {',': 7.608161512126157, '.': 3.1401708329525233, ';': 0.7993101464541578}}
+
+Name: disputed_punctuation
+Type: Dict(Int : {Dict(Char : Float)})
+Purpose: For each disputed article number, store the normalized average punctuation for each type of punctuation that occurs in that article.
+Example: {18: {',': 9.13091309130913, '.': 4.9504950495049505, ';': 1.3751375137513753}}
+
+Name: total_averages
+Type: Dict (Str : Float)
+Purpose: For each author, store the average number of words per sentence across all attributed articles.
+Example: {'HAMILTON': 34.25, 'JAY': 38.41, 'MADISON': 34.51}
+
+Name: disputed_averages
+Type: Dict (Int : Float)
+Purpose: For each disputed article number, stores the average words per sentence for that article.
+Example: {18: 23.62, 19: 29.55, 20: 27.47, 49: 28.33, 50: 26.19, 51: 31.34, 52: 31.25, 53: 31.33, 54: 30.69, 55: 33.43, 56: 31.09, 57: 28.29, 58: 34.15, 64: 41.14}
+
 ## Results
 
 ### The First Results - Punctuation Analysis
