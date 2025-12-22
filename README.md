@@ -50,6 +50,44 @@ Supervised learning seems like the best choice for this application, as we have 
 3. *Bag-of-Words* (BoW) - Frequencies of different words in each article using *topic-independent* keywords for better analysis across different papers and subjects.
 4. *Syntactic Features* - Lexical categories and feature labelling, Part-of-Speech (POS).
 
+### The First Results - Punctuation Analysis
+
+The first major results for this project come from punctuation analysis confined to the articles in the paper only. Punctuation analysis is the first step in stylistic analysis, and by looking at the punctuation usage of each author, we can take a step towards establishing a writing style for each individual, allowing direct comparison to that used in each article. Using this method means that we can then compare which style most closely resembles that which is used in each article, giving us a better idea of which author was responsible for writing a particular article.
+
+For the first step into punctuation analysis, I have restricted my search to The Federalist Papers only as a first step. Naturally, this means the next logical step is to expand the analysis to previous works of each author, building up the author styles I previously mentioned. However, for now, I have used this current data and run a preliminary comparison to see if I'm heading in the correct direction. The metrics for this comparison consist of a comparison between total punctuation usage per 1000 words of each article, per author, across the entire publication. I then used Total Absolute Difference (TAD), which consists of taking the difference of the author's total average across all papers (Average function usage of all undisputed papers attributed to one author across all papers) against the average of each individual contested paper.
+
+As an example, take Article 18. The graph shows the punctuation usage across the article per sentence. I take an average of these values across 1000 words. I then take the total average of each author, take Hamilton as an example, and compute the difference between that total average and the average of Article 18 across each type of punctuation. The results can be seen in the following figure.
+
+![Graph Showing the Average Punctuation Usage per Sentence for Article 18 of The Federalist Papers](src/punc_graphs/average_punc_18.png)
+
+article         ,         .         ;         (         )         -          :         ?         `         '    author
+     18  1.522752  1.810324  0.575827  0.077005  0.077005  0.114279        NaN       NaN       NaN       NaN  HAMILTON
+
+I then take the sum of each of these differences to get the TAD, which works out to be 4.177193 for this particular article and author. Repeating this for each author, we also get the values 4.005356 for Jay and 3.045500 for Madison. We then compare these values and take the lowest value, as this represents the closest match to the overall punctuation usage for an author and that used in the particular article. So in the case of Article 18, we attribute Madison, as his TAD is closest to 0.
+
+Repeating this for every disputed paper, we get the following results.
+
+          HAMILTON_TAD   JAY_TAD  MADISON_TAD Best Match
+article
+18           4.177193  4.005356     3.045500    MADISON
+19           5.186822  4.994623     4.094340    MADISON
+20           5.694233  5.395003     4.575195    MADISON
+49           1.705146  2.290675     2.108466   HAMILTON
+50           4.397100  4.108221     4.082052    MADISON
+51           1.164875  2.187222     2.103554   HAMILTON
+52           1.699144  1.678109     1.311747    MADISON
+53           1.335050  1.245165     0.918898    MADISON
+54           1.278345  1.320628     1.033813    MADISON
+55           0.789800  1.657792     1.750226   HAMILTON
+56           2.056060  2.641643     2.623698   HAMILTON
+57           3.133577  4.182924     4.199794   HAMILTON
+58           1.322836  1.456486     1.253914    MADISON
+64           2.584629  1.598785     2.071018        JAY
+
+You will notice that this does not line up exactly with the modern-day consensus, but this is exactly what I expected, as this is only one piece of the larger puzzle. However, these results do show promise, as some of the results do match up, leading me to believe that, as a method of exploration, punctuation usage and style are a worthwhile avenue to explore more deeply.
+
+As I mentioned earlier, the next logical step would be to expand this search to works outside of The Federalist Papers, as well as to build more on this stylistic profile for each author.
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
