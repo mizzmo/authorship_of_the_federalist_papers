@@ -60,16 +60,16 @@ As an example, take Article 18. The graph shows the punctuation usage across the
 
 ![Graph Showing the Average Punctuation Usage per Sentence for Article 18 of The Federalist Papers](src/punc_graphs/average_punc_18.png)
 
-''' utf-8
+``` utf-8
 article         ,         .         ;         (         )         -          :         ?         `         '    author
      18  1.522752  1.810324  0.575827  0.077005  0.077005  0.114279        NaN       NaN       NaN       NaN  HAMILTON
-'''
+```
 
 I then take the sum of each of these differences to get the TAD, which works out to be 4.177193 for this particular article and author. Repeating this for each author, we also get the values 4.005356 for Jay and 3.045500 for Madison. We then compare these values and take the lowest value, as this represents the closest match to the overall punctuation usage for an author and that used in the particular article. So in the case of Article 18, we attribute Madison, as his TAD is closest to 0.
 
 Repeating this for every disputed paper, we get the following results.
 
-''' utf-8
+``` utf-8
           HAMILTON_TAD   JAY_TAD  MADISON_TAD Best Match
 article
 18           4.177193  4.005356     3.045500    MADISON
@@ -86,7 +86,7 @@ article
 57           3.133577  4.182924     4.199794   HAMILTON
 58           1.322836  1.456486     1.253914    MADISON
 64           2.584629  1.598785     2.071018        JAY
-'''
+```
 
 You will notice that this does not line up exactly with the modern-day consensus, but this is exactly what I expected, as this is only one piece of the larger puzzle. However, these results do show promise, as some of the results do match up, leading me to believe that, as a method of exploration, punctuation usage and style are a worthwhile avenue to explore more deeply.
 
