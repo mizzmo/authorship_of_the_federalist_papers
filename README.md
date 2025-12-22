@@ -54,6 +54,7 @@ Supervised learning seems like the best choice for this application, as we have 
 
 ### Stylistic Analysis
 
+``` utf-8
 Name: federalist_dict
 Type: Dict (Int : Str)
 Purpose: Holds each unprocessed article indexed to its corresponding article number. For example, Article 1 is stored at Key 1.
@@ -83,6 +84,7 @@ Name: disputed_averages
 Type: Dict (Int : Float)
 Purpose: For each disputed article number, stores the average words per sentence for that article.
 Example: {18: 23.62, 19: 29.55, 20: 27.47, 49: 28.33, 50: 26.19, 51: 31.34, 52: 31.25, 53: 31.33, 54: 30.69, 55: 33.43, 56: 31.09, 57: 28.29, 58: 34.15, 64: 41.14}
+```
 
 ## Results
 
