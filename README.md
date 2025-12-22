@@ -50,6 +50,8 @@ Supervised learning seems like the best choice for this application, as we have 
 3. *Bag-of-Words* (BoW) - Frequencies of different words in each article using *topic-independent* keywords for better analysis across different papers and subjects.
 4. *Syntactic Features* - Lexical categories and feature labelling, Part-of-Speech (POS).
 
+## Results
+
 ### The First Results - Punctuation Analysis
 
 The first major results for this project come from punctuation analysis confined to the articles in the paper only. Punctuation analysis is the first step in stylistic analysis, and by looking at the punctuation usage of each author, we can take a step towards establishing a writing style for each individual, allowing direct comparison to that used in each article. Using this method means that we can then compare which style most closely resembles that which is used in each article, giving us a better idea of which author was responsible for writing a particular article.
