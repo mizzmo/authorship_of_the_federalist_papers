@@ -14,6 +14,7 @@ nltk.download('punkt_tab')
 from process_fed import get_federalist_dict
 from federalist_authors_enum import FederalistAuthor
 from graphing import plot_averages, plot_punctuation
+from euclidean_distance import euclidean_distance
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -245,7 +246,10 @@ def main():
     # Plot the average data in a bar graph.
     #plot_averages(total_averages, disputed_averages)
     #plot_punctuation(total_punctuation, disputed_punctuation)
-    print(disputed_averages)
+    
+    # Euclidean Distance
+    euclidean_values = euclidean_distance(total_punctuation, disputed_punctuation)
+    
     pass
     combined_rows = []
 
