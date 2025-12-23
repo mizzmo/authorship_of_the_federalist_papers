@@ -130,6 +130,56 @@ You will notice that this does not line up exactly with the modern-day consensus
 
 As I mentioned earlier, the next logical step would be to expand this search to works outside of The Federalist Papers, as well as to build more on this stylistic profile for each author.
 
+### Euclidean Distance
+
+The second step for this analysis was using a different measure for comparing punctuation. For this I went with Euclidean Distance, the benefits over TAD being the higher penalties for larger distances. This uses the same basic idea as TAD, so the results are expected to be similar, if not the same, but I aim to use this more as a reinforcement rather than a totally different measure of similarity.
+
+Implementing Euclidean Distance is fairly easy, and just uses the following equation:
+
+![Euclidean Distance Equation](resources/euclidean_dist.png)
+
+The results we get from applying this equation are as expected, with very little variation in final result (closest match) over TAD, but with different values of measurement.
+
+```utf-8
+Euclidean Distance Per Article Per Author
+
+    HAMILTON       JAY   MADISON Best Match
+18  2.476729  2.538480  2.029672    MADISON
+19  2.806521  2.876214  2.294644    MADISON
+20  3.045540  2.780510  2.354734    MADISON
+49  0.923194  1.311699  1.121732   HAMILTON
+50  2.999860  2.520699  2.430505    MADISON
+51  0.636588  1.408510  1.263493   HAMILTON
+52  0.853494  0.935949  0.613632    MADISON
+53  0.780391  0.575158  0.425526    MADISON
+54  0.730146  0.698429  0.488848    MADISON
+55  0.483086  0.981196  0.972721   HAMILTON
+56  0.872656  1.153955  1.188977   HAMILTON
+57  2.411042  3.163500  3.130167   HAMILTON
+58  0.713367  0.837343  0.729615   HAMILTON
+64  1.476969  0.749335  0.910483        JAY
+```
+
+We can see the direct comparison in the following figure, where the only difference is in Article 58:
+
+```utf-8
+     Euclidean      TAD
+18     MADISON      MADISON
+19     MADISON      MADISON
+20     MADISON      MADISON
+49    HAMILTON      HAMILTON
+50     MADISON      MADISON
+51    HAMILTON      HAMILTON
+52     MADISON      MADISON
+53     MADISON      MADISON
+54     MADISON      MADISON
+55    HAMILTON      HAMILTON
+56    HAMILTON      HAMILTON
+57    HAMILTON      HAMILTON
+58    HAMILTON      MADISON
+64         JAY      JAY
+```
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.

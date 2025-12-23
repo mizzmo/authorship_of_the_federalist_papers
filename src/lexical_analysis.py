@@ -289,6 +289,8 @@ def main():
     # Store the result in a txt file
     with open('src/punc_graphs/total_absolute_difference.txt', 'w') as f:
         f.write(df_comparison.to_string())
+        
+    print(df_comparison['Best Match'].to_string())
 
 
 main()

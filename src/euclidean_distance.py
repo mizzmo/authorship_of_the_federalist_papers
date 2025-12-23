@@ -9,7 +9,7 @@ def format_result(euclidean_result):
     df = pd.DataFrame.from_dict(euclidean_result)
     # Add a new column which shows the closest match (lowest value)
     df['Best Match'] = df.idxmin(axis = 1)
-    
+        
     # Store the result in a txt file
     with open('src/punc_graphs/euclidean_dist.txt', 'w') as f:
         f.write(df.to_string())
