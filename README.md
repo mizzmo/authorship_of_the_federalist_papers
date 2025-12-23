@@ -180,6 +180,10 @@ We can see the direct comparison in the following figure, where the only differe
 64         JAY      JAY
 ```
 
+This may look boring, but it's actually an important step towards building a robust model. In confirming the results across more than one form of measurement, it shows that the dataset is sound and resistant to methodology changes. This gives me confidence to continue down this route of punctuation analysis.
+
+We also see that one article, 58, is a mismatch. This tells us that 58 may be ambiguous or near the boundary for comparison between Madison and Hamilton in particular. This means that punctuation analysis may be less effective for this article, as two authors share a similar style to that used in the article. However, if we wanted to keep going with punctuation analysis for article 58, the next logical step would be to introduce a third metric, which I intend to do regardless in Cosine Similarity.
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
