@@ -15,6 +15,7 @@ from process_fed import get_federalist_dict
 from federalist_authors_enum import FederalistAuthor
 from graphing import plot_averages, plot_punctuation
 from euclidean_distance import euclidean_distance
+from cosine_similarity import cosine_similarity
 
 def clean_word_token(token: str):
     # Remove whitespace
@@ -250,6 +251,8 @@ def main():
     # Euclidean Distance
     euclidean_values = euclidean_distance(total_punctuation, disputed_punctuation)
     
+    cosine_values = cosine_similarity(total_punctuation, disputed_punctuation)
+    
     pass
     combined_rows = []
 
@@ -290,8 +293,6 @@ def main():
     with open('src/punc_graphs/total_absolute_difference.txt', 'w') as f:
         f.write(df_comparison.to_string())
         
-    print(df_comparison['Best Match'].to_string())
-
 
 main()
 
