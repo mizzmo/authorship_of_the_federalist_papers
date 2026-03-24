@@ -184,6 +184,58 @@ This may look boring, but it's actually an important step towards building a rob
 
 We also see that one article, 58, is a mismatch. This tells us that 58 may be ambiguous or near the boundary for comparison between Madison and Hamilton in particular. This means that punctuation analysis may be less effective for this article, as two authors share a similar style to that used in the article. However, if we wanted to keep going with punctuation analysis for article 58, the next logical step would be to introduce a third metric, which I intend to do regardless in Cosine Similarity.
 
+### Cosine Similarity
+
+As previously mentioned, the next step of analysis is cosine similarity.
+
+Cosine similarity is a measure of similarity between proportionate usage in a text, with reduced sensitivity to scale, leading to results that depend more on overall writing style than raw punctuation frequency. The equation for cosine similarity uses the dot product of each matching vector divided by the magnitude of each article. We use magnitude here to normalize the comparisons of each dataset.
+
+![Cosine Similarity](resources/cosine_sim.png)
+
+In this light, I produced slightly differing results to that of Euclidean and TAD analysis, but also promising matches that could further prove my previous results.
+
+``` utf-8
+    HAMILTON       JAY   MADISON Best Match
+18  0.992357  0.980076  0.990208   HAMILTON
+19  0.976474  0.965702  0.980374    MADISON
+20  0.992996  0.987436  0.995223    MADISON
+49  0.995774  0.988889  0.992246   HAMILTON
+50  0.996925  0.996335  0.995132   HAMILTON
+51  0.997555  0.990646  0.995400   HAMILTON
+52  0.998728  0.994752  0.997688   HAMILTON
+53  0.998689  0.997981  0.998879    MADISON
+54  0.999203  0.996984  0.998517   HAMILTON
+55  0.998458  0.996612  0.998389   HAMILTON
+56  0.995442  0.991494  0.991648   HAMILTON
+57  0.985946  0.971262  0.981044   HAMILTON
+58  0.998066  0.995480  0.996881   HAMILTON
+64  0.993696  0.998541  0.996088        JAY
+```
+
+We can examine the results that show the strongest agreement across methods. For example, article 64 consistently identifies Jay as the closest match across all tests, suggesting a high degree of confidence in this classification. Similarly, articles 19, 20, 49, 51, 53, 55, 56 and 57 produce consistent results across all three methods, indicating a strong statistical similarity to their assigned authors.
+
+The cases where results differ are also informative. While each method is mathematically valid, the variation in outcomes highlights that some articles are more difficult to distinguish using these statistical approaches. This suggests that punctuation-based features alone may not always be sufficiently discriminative, and that additional methods or features may be required to achieve more reliable classifications.
+
+A side by side comparison can be seen below.
+
+```utf-8
+     Euclidean      TAD        Cosine
+18     MADISON      MADISON    HAMILTON
+19     MADISON      MADISON    MADISON
+20     MADISON      MADISON    MADISON
+49    HAMILTON      HAMILTON   HAMILTON
+50     MADISON      MADISON    HAMILTON
+51    HAMILTON      HAMILTON   HAMILTON
+52     MADISON      MADISON    HAMILTON
+53     MADISON      MADISON    MADISON
+54     MADISON      MADISON    HAMILTON
+55    HAMILTON      HAMILTON   HAMILTON
+56    HAMILTON      HAMILTON   HAMILTON
+57    HAMILTON      HAMILTON   HAMILTON
+58    HAMILTON      MADISON    HAMILTON
+64         JAY      JAY        JAY
+```
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
