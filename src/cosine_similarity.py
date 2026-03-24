@@ -2,9 +2,19 @@ from math import sqrt
 import pandas as pd
 # Cosine similarity
 
+def format_result(result_dict):
+    # Convert to dataframe
+    df = pd.DataFrame.from_dict(result_dict)
+    # Add a new column which shows the closest match (highest value)
+    df['Best Match'] = df.idxmax(axis = 1)
+        
+    # Store the result in a txt file
+    with open('src/punc_graphs/cosine_dist.txt', 'w') as f:
+        f.write(df.to_string())
+            
+
 def calc_magnitude(vector):
     # Take each punctuation usage, square them, add them together and square root the result.
-    magnitude = 0
     running = 0
     for key in vector.keys():
         squared = vector[key] * vector[key]
@@ -42,5 +52,7 @@ def cosine_similarity(total_punctuation, disputed_punctuation):
         output[author] = similarities
     
     print(output)
+    # Find the closest matches. 
+    format_result(output)
     
     
