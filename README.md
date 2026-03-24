@@ -236,6 +236,34 @@ A side by side comparison can be seen below.
 64         JAY      JAY        JAY
 ```
 
+### Section Conclusion
+
+Now i've used three different statistical methods to compare punctuation usage and lexical analysis, how do my results line up with the commonly accepted solution?
+
+``` utf-8
+     Euclidean   TAD       Cosine     Commonly Accepted
+18   MADISON     MADISON   HAMILTON   MADISON
+19   MADISON     MADISON   MADISON    MADISON
+20   MADISON     MADISON   MADISON    MADISON
+49   HAMILTON    HAMILTON  HAMILTON   MADISON
+50   MADISON     MADISON   HAMILTON   MADISON
+51   HAMILTON    HAMILTON  HAMILTON   HAMILTON
+52   MADISON     MADISON   HAMILTON   MADISON
+53   MADISON     MADISON   MADISON    MADISON
+54   MADISON     MADISON   HAMILTON   MADISON
+55   HAMILTON    HAMILTON  HAMILTON   HAMILTON
+56   HAMILTON    HAMILTON  HAMILTON   MADISON
+57   HAMILTON    HAMILTON  HAMILTON   MADISON
+58   HAMILTON    MADISON   HAMILTON   MADISON
+64   JAY         JAY       JAY        JAY
+```
+
+Firstly, we can see areas of agreement across all methods that then also line up with the accepted solution, namely 19, 20, 51, 53, 55 and 64. These results being consistent shows a high degree of confidence in each classification, and also suggest clear stylistic differences, able to be identified and detectable by simple statistical models.
+
+We also observe more ambiguous results. Disagreements between my own models suggest more ambiguous writing styles, making it harder to detect and make a decision on which author is likely responsible. This gives clear pointers on where I should direct different methods to try and iron out this ambiguity to get a more definitive result. We can also see the effects of certain models on the results, for example Cosine similarity seems to side with Hamilton more often than other models in cases where the results are ambiguous.
+
+Overall, I can safely say that punctuation alone is not enough to definitively define authorship in this case. Stylistic overlap across multiple articles makes it hard to define writing styles in more than one case, so another approach is needed. My next step in analysis will be to implement a Bayesian model to give improved uncertainty handling. I should also think about which features I am using to measure similarity. In the case of ambiguous articles, using punctuation is a weak comparison feature, so it is appropriate to use more than one feature, as a model is only as good as its training data.
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
