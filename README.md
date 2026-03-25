@@ -264,6 +264,16 @@ We also observe more ambiguous results. Disagreements between my own models sugg
 
 Overall, I can safely say that punctuation alone is not enough to definitively define authorship in this case. Stylistic overlap across multiple articles makes it hard to define writing styles in more than one case, so another approach is needed. My next step in analysis will be to implement a Bayesian model to give improved uncertainty handling. I should also think about which features I am using to measure similarity. In the case of ambiguous articles, using punctuation is a weak comparison feature, so it is appropriate to use more than one feature, as a model is only as good as its training data.
 
+### Naive Bayes Analysis
+
+A Naive Bayes analysis is a probability-based prediction model commonly used for data classification. It operates under the simplifying assumption that all features are independent of one another.
+
+There are three main types of Naive Bayes classifiers. For this scenario, the most appropriate is **Multinomial Naive Bayes**. This model is well-suited for discrete data and for features represented by frequencies. It assumes that each feature follows a multinomial distribution, meaning each feature can have two or more possible outcomes.
+
+In Naive Bayes analysis, increasing the number of features often improves predictive accuracy. However, the quality of the selected features is equally important.
+
+As previously observed, using punctuation usage alone has produced inconsistent results across different topical models. By incorporating multiple features into this Bayesian analysis, it becomes possible to either support or challenge those earlier findings using a more robust and information-rich feature set.
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
