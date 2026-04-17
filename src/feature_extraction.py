@@ -3,73 +3,61 @@ from process_fed import get_federalist_dict
 import re
 import nltk
 nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger_eng')
-nltk.download('universal_tagset')
-nltk.download('wordnet')
-from nltk.tokenize import word_tokenize
-from nltk.corpus import wordnet
-from nltk.corpus import stopwords 
-from nltk.stem import WordNetLemmatizer as wnl   
-from nltk.tag import pos_tag
+
+from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
-# Bag of words model.
-
-def convert_tags(input_tag):
-    if input_tag.startswith('J'):
-        return wordnet.ADJ
-    elif input_tag.startswith('V'):
-        return wordnet.VERB
-    elif input_tag.startswith('N'):
-        return wordnet.NOUN
-    elif input_tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return wordnet.NOUN
+from sklearn.naive_bayes import MultinomialNB
 
 
-# Pre preparation
-def pre_prep():
-    cleaned_articles = {}
-    federalist_articles, author_dict = get_federalist_dict()
+cleaned_articles = {}
+federalist_articles, author_dict = get_federalist_dict()
+
+# Remove non alphabet characters, all lowercase
+for num, article in federalist_articles.items():  
+    cleaned_articles[num] = (re.sub('[^A-Za-z]', ' ', article)).lower()
+
+# Split the input data into training and test sets
+# Disputed articles should be used as test sets.
+
+# Training Set (Non Disputed)
+train_texts = []
+train_labels = []
+for num, article in cleaned_articles.items():
+    if author_dict[num] != "DISPUTED":
+        train_texts.append(article)
+        train_labels.append(author_dict[num])
+
+# Test Sets (Disputed)
+test_texts = []
+test_ids = []
+
+for num, article in cleaned_articles.items():
+    if author_dict[num] == "DISPUTED":
+        test_texts.append(article)
+        test_ids.append(num)
+
+# Count Vectorization - Create a Document Term Matrix by counting how many times a word from the vocab appears in a document.
+vectorizer = CountVectorizer(analyzer='char', ngram_range=(3,5))
+
+X_train = vectorizer.fit_transform(train_texts)
+X_test = vectorizer.transform(test_texts)
+
+# Multinomial Naive Bayes Classifier
+mnb = MultinomialNB()
+mnb.fit(X_train, train_labels)
+
+predictions = mnb.predict(X_test)
+
+for i in range(len(test_ids)):
+    print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
     
-    # Remove non alphabet characters, all lowercase
-    for num, article in federalist_articles.items():  
-        cleaned_articles[num] = (re.sub('[^A-Za-z]', ' ', article)).lower()
-        
-    # 1: Tokenization
-    tokenized_articles = {}
-    for num, article in cleaned_articles.items():
-        # Tokenize each article (creates arrary of words)
-        tokenized = word_tokenize(article)
-        # Remove Stopwords
-        stopwords_removed = []
-        for word in tokenized:
-            if word not in stopwords.words('english'):
-                stopwords_removed.append(word)
-        
-        # POS Tagging
-        pos_tagged = []
-        pos_tagged = pos_tag(stopwords_removed, tagset='universal')
-        
-        
-        # Lemmatization
-        lemmatized = []
-        for pos in pos_tagged:
-            # Convert to correct tags for WordNet
-            lemmatizer = wnl()
-            lemma = lemmatizer.lemmatize(pos[0], convert_tags(pos[1]))
-            lemmatized.append(lemma)
-            
-        # Add back to overall dictionary as one sentence.
-        tokenized_articles[num] = " ".join(lemmatized)
     
-    # 2: Count Vectorization - Create a Document Term Matrix by counting how many times a word from the vocab appears in a document.
-    matrix = CountVectorizer(max_features=1000)
-    for article in tokenized_articles.values():  
-        print(article)
-        x = matrix.fit_transform(article).toarray()
-        print(x)
+    
 
+X = vectorizer.fit_transform(train_texts)
+y = train_labels
 
-pre_prep()
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y)
+
+mnb.fit(X_tr, y_tr)
+print("Validation accuracy:", mnb.score(X_val, y_val))
