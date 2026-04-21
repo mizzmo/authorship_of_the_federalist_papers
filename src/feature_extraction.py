@@ -3,6 +3,11 @@ from process_fed import get_federalist_dict
 import re
 
 
+import nltk
+nltk.download('punkt')
+from nltk.tokenize import word_tokenize
+
+
 def simple_feature_extraction():
     cleaned_articles = {}
     federalist_articles, author_dict = get_federalist_dict()
@@ -13,40 +18,33 @@ def simple_feature_extraction():
     
     return cleaned_articles, author_dict
 
-
-
-'''
-MultinomialNB
-Paper 18 predicted author: MADISON
-Paper 19 predicted author: HAMILTON
-Paper 20 predicted author: HAMILTON
-Paper 49 predicted author: MADISON
-Paper 50 predicted author: MADISON
-Paper 51 predicted author: MADISON
-Paper 52 predicted author: MADISON
-Paper 53 predicted author: MADISON
-Paper 54 predicted author: MADISON
-Paper 55 predicted author: MADISON
-Paper 56 predicted author: HAMILTON
-Paper 57 predicted author: MADISON
-Paper 58 predicted author: MADISON
-Paper 64 predicted author: HAMILTON
-Validation accuracy: 0.8666666666666667
-
-LinearSVC
-Paper 18 predicted author: MADISON
-Paper 19 predicted author: MADISON
-Paper 20 predicted author: MADISON
-Paper 49 predicted author: HAMILTON
-Paper 50 predicted author: MADISON
-Paper 51 predicted author: MADISON
-Paper 52 predicted author: MADISON
-Paper 53 predicted author: MADISON
-Paper 54 predicted author: HAMILTON
-Paper 55 predicted author: HAMILTON
-Paper 56 predicted author: HAMILTON
-Paper 57 predicted author: MADISON
-Paper 58 predicted author: MADISON
-Paper 64 predicted author: HAMILTON
-Validation accuracy: 0.7333333333333333
-'''
+# Feature extraction using only function words.
+def function_words_extraction():
+    cleaned_tokens = {}
+    federalist_articles, author_dict = get_federalist_dict()
+    
+    
+    # Get list of function words.
+    function_words = []
+    with open("resources/function_words_clean.txt", 'r') as f:
+        # File already parsed into single word lines, so only need to remove new line characters
+        function_words = [line.rstrip() for line in f]
+        f.close()
+    
+    for num, article in federalist_articles.items():  
+        cleaned_tokens[num] = word_tokenize((re.sub('[^A-Za-z]', ' ', article)).lower())
+    
+    function_tokens = {}
+    
+    # Filter out any words that are not function words.
+    for num, tokens in cleaned_tokens.items():
+        c_function_words = []
+        for token in tokens:
+            if token in function_words:
+                c_function_words.append(token)
+        # Add list of function tokens to dictionary to associate with correct article
+        function_tokens[num] = c_function_words
+        
+    return " ".join([token for tokens in function_tokens.values() for token in tokens])
+    
+            
