@@ -46,7 +46,7 @@ def multinomial_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
     X_train = vectorizer.fit_transform(train_texts)
     X_test = vectorizer.transform(test_texts)
-    print('\nMultinomialNB')
+    print('MultinomialNB')
     # Multinomial Naive Bayes Classifier
     model = MultinomialNB()
     model.fit(X_train, train_labels)
@@ -71,7 +71,7 @@ def multinomial_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
 def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
     
-    print('\nLinearSVC')
+    print('LinearSVC')
 
     train_texts, train_labels, test_texts, test_ids = get_train_test(cleaned_articles, author_dict)
 
