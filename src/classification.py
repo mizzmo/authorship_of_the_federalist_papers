@@ -6,10 +6,15 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import f1_score
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
 from feature_extraction import simple_feature_extraction
 from feature_extraction import function_words_extraction
 
+show_results = True    
+    
 def get_train_test(cleaned_articles, author_dict):
     # Split the input data into training and test sets
     # Disputed articles should be used as test sets.
@@ -54,21 +59,26 @@ def multinomial_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
     predictions = model.predict(X_test)
 
-    for i in range(len(test_ids)):
-        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    if show_results:
+        for i in range(len(test_ids)):
+            print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
         
     #Validation
-    X = vectorizer.fit_transform(train_texts)
     y = train_labels
 
-    X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y)
+    X_tr, X_val, y_tr, y_val = train_test_split(X_train, y, test_size=0.2, stratify=y)
 
     model.fit(X_tr, y_tr)
-    print("Validation accuracy:", model.score(X_val, y_val))
+        
+    y_pred = model.predict(X_val)
 
     accuracy = model.score(X_val, y_val)
-    # Return the accuracy so I can analyse it after each iteration.
-    return accuracy
+    f1 = f1_score(y_val, y_pred, average='macro')
+
+    print("Validation accuracy:", accuracy)
+    print("Validation F1:", f1)
+
+    return accuracy, f1
 
 def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
     
@@ -89,20 +99,28 @@ def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
     predictions = model.predict(X_test)
 
-    for i in range(len(test_ids)):
-        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    if show_results:
+        for i in range(len(test_ids)):
+            print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
 
     #Validation
-    X = vectorizer.fit_transform(train_texts)
     y = train_labels
 
-    X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y)
+    X_tr, X_val, y_tr, y_val = train_test_split(X_train, y, test_size=0.2, stratify=y)
 
+    
     model.fit(X_tr, y_tr)
-    print("Validation accuracy:", model.score(X_val, y_val))
+        
+    y_pred = model.predict(X_val)
+
     accuracy = model.score(X_val, y_val)
-    # Return the accuracy so I can analyse it after each iteration.
-    return accuracy
+    f1 = f1_score(y_val, y_pred, average='macro')
+
+    print("Validation accuracy:", accuracy)
+    print("Validation F1:", f1)
+
+    return accuracy, f1
+
     
     
     
