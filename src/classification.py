@@ -33,25 +33,28 @@ def get_train_test(cleaned_articles, author_dict):
     return train_texts, train_labels, test_texts, test_ids
 
 
-def multinomial_cl(cleaned_articles, author_dict):
+def multinomial_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
     
 
     train_texts, train_labels, test_texts, test_ids = get_train_test(cleaned_articles, author_dict)
     
     # Count Vectorization - Create a Document Term Matrix by counting how many times a word from the vocab appears in a document.
-    vectorizer = CountVectorizer(analyzer='char', ngram_range=(3,5))
+    vectorizer = CountVectorizer(
+        analyzer='char',
+        ngram_range=(ngram_lower, ngram_upper)
+    )
 
     X_train = vectorizer.fit_transform(train_texts)
     X_test = vectorizer.transform(test_texts)
     print('\nMultinomialNB')
     # Multinomial Naive Bayes Classifier
-    mnb = MultinomialNB()
-    mnb.fit(X_train, train_labels)
+    model = MultinomialNB()
+    model.fit(X_train, train_labels)
 
-    predictions = mnb.predict(X_test)
+    predictions = model.predict(X_test)
 
-    for i in range(len(test_ids)):
-        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    #for i in range(len(test_ids)):
+    #    print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
         
     #Validation
     X = vectorizer.fit_transform(train_texts)
@@ -59,11 +62,14 @@ def multinomial_cl(cleaned_articles, author_dict):
 
     X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y)
 
-    mnb.fit(X_tr, y_tr)
-    print("Validation accuracy:", mnb.score(X_val, y_val))
+    model.fit(X_tr, y_tr)
+    print("Validation accuracy:", model.score(X_val, y_val))
 
+    accuracy = model.score(X_val, y_val)
+    # Return the accuracy so I can analyse it after each iteration.
+    return accuracy
 
-def linear_cl(cleaned_articles, author_dict):
+def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
     
     print('\nLinearSVC')
 
@@ -71,8 +77,7 @@ def linear_cl(cleaned_articles, author_dict):
 
     vectorizer = TfidfVectorizer(
         analyzer='char',
-        ngram_range=(3,5),
-        max_features=5000
+        ngram_range=(ngram_lower,ngram_upper),
     )
 
     X_train = vectorizer.fit_transform(train_texts)
@@ -83,8 +88,8 @@ def linear_cl(cleaned_articles, author_dict):
 
     predictions = model.predict(X_test)
 
-    for i in range(len(test_ids)):
-        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    #for i in range(len(test_ids)):
+    #    print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
 
     #Validation
     X = vectorizer.fit_transform(train_texts)
@@ -94,9 +99,12 @@ def linear_cl(cleaned_articles, author_dict):
 
     model.fit(X_tr, y_tr)
     print("Validation accuracy:", model.score(X_val, y_val))
+    accuracy = model.score(X_val, y_val)
+    # Return the accuracy so I can analyse it after each iteration.
+    return accuracy
     
     
     
-cleaned_articles, author_dict = simple_feature_extraction()
-#multinomial_cl(cleaned_articles, author_dict)
-linear_cl(cleaned_articles, author_dict)
+#cleaned_articles, author_dict = simple_feature_extraction()
+#multinomial_cl(cleaned_articles, author_dict, 3, 5)
+#linear_cl(cleaned_articles, author_dict, 3, 5)
