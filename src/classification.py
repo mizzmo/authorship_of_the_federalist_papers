@@ -8,6 +8,7 @@ from sklearn.svm import LinearSVC
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from feature_extraction import simple_feature_extraction
+from feature_extraction import function_words_extraction
 
 def get_train_test(cleaned_articles, author_dict):
     # Split the input data into training and test sets
@@ -53,8 +54,8 @@ def multinomial_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
     predictions = model.predict(X_test)
 
-    #for i in range(len(test_ids)):
-    #    print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    for i in range(len(test_ids)):
+        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
         
     #Validation
     X = vectorizer.fit_transform(train_texts)
@@ -88,8 +89,8 @@ def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
 
     predictions = model.predict(X_test)
 
-    #for i in range(len(test_ids)):
-    #    print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
+    for i in range(len(test_ids)):
+        print(f"Paper {test_ids[i]} predicted author: {predictions[i]}")
 
     #Validation
     X = vectorizer.fit_transform(train_texts)
@@ -106,5 +107,7 @@ def linear_cl(cleaned_articles, author_dict, ngram_lower, ngram_upper):
     
     
 #cleaned_articles, author_dict = simple_feature_extraction()
+#cleaned_articles, author_dict = function_words_extraction()
+
 #multinomial_cl(cleaned_articles, author_dict, 3, 5)
 #linear_cl(cleaned_articles, author_dict, 3, 5)

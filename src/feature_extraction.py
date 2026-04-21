@@ -20,7 +20,8 @@ def simple_feature_extraction():
 
 # Feature extraction using only function words.
 def function_words_extraction():
-    cleaned_tokens = {}
+    
+    cleaned_articles = {}
     federalist_articles, author_dict = get_federalist_dict()
     
     
@@ -31,6 +32,7 @@ def function_words_extraction():
         function_words = [line.rstrip() for line in f]
         f.close()
     
+    cleaned_tokens = {}
     for num, article in federalist_articles.items():  
         cleaned_tokens[num] = word_tokenize((re.sub('[^A-Za-z]', ' ', article)).lower())
     
@@ -44,7 +46,12 @@ def function_words_extraction():
                 c_function_words.append(token)
         # Add list of function tokens to dictionary to associate with correct article
         function_tokens[num] = c_function_words
+        # Join tokens for the current article and add to dictionary
+        cleaned_articles[num] = " ".join(c_function_words)
         
-    return " ".join([token for tokens in function_tokens.values() for token in tokens])
+    return cleaned_articles, author_dict
+
+
+function_words_extraction()
     
             
