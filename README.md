@@ -258,9 +258,9 @@ Now i've used three different statistical methods to compare punctuation usage a
 64   JAY         JAY       JAY        JAY
 ```
 
-Firstly, we can see areas of agreement across all methods that then also line up with the accepted solution, namely 19, 20, 51, 53, 55 and 64. These results being consistent shows a high degree of confidence in each classification, and also suggest clear stylistic differences, able to be identified and detectable by simple statistical models.
+Firstly, we can see areas of agreement across all methods that then also line up with the accepted solution, namely 19, 20, 51, 53, 55 and 64. These results being consistent show a high degree of confidence in each classification, and also suggest clear stylistic differences, which can be identified and detected by simple statistical models.
 
-We also observe more ambiguous results. Disagreements between my own models suggest more ambiguous writing styles, making it harder to detect and make a decision on which author is likely responsible. This gives clear pointers on where I should direct different methods to try and iron out this ambiguity to get a more definitive result. We can also see the effects of certain models on the results, for example Cosine similarity seems to side with Hamilton more often than other models in cases where the results are ambiguous.
+We also observe more ambiguous results. Disagreements between my own models suggest more ambiguous writing styles, making it harder to detect and make a decision on which author is likely responsible. This gives clear pointers on where I should direct different methods to try and iron out this ambiguity to get a more definitive result. We can also see the effects of certain models on the results, for example, Cosine similarity seems to side with Hamilton more often than other models in cases where the results are ambiguous.
 
 Overall, I can safely say that punctuation alone is not enough to definitively define authorship in this case. Stylistic overlap across multiple articles makes it hard to define writing styles in more than one case, so another approach is needed. My next step in analysis will be to implement a Bayesian model to give improved uncertainty handling. I should also think about which features I am using to measure similarity. In the case of ambiguous articles, using punctuation is a weak comparison feature, so it is appropriate to use more than one feature, as a model is only as good as its training data.
 
@@ -276,27 +276,27 @@ As previously observed, using punctuation usage alone has produced inconsistent 
 
 #### Feature Extraction
 
-For this task, it was necessary to define different features for use in classification. I defined two simple types of classification for this, namely simple feature extraction, which removed any non-alphabetical characters from the text, keeping stop-words, and function word extraction, which removed everything apart from function words. In most cases, function words cause noise in classification tasks, however in the case of defining authorship, they provide important stylistic information that can be used to narrow down the author of a specific paper, hence why it was important to keep them in.
+For this task, it was necessary to define different features for use in classification. I defined two simple types of classification for this, namely simple feature extraction, which removed any non-alphabetical characters from the text, keeping stop-words, and function word extraction, which removed everything apart from function words. In most cases, function words cause noise in classification tasks; in the case of defining authorship, they provide important stylistic information that can be used to narrow down the author of a specific paper, hence why it was important to keep them in.
 
-My function word extraction method works by tokenizing every article, and then copying any matching words to a separate function word corpus, adding these words to a dictionary that keeps a large string of all function words for each article. Using this separate corpus makes this type of extraction trivial. 
+My function word extraction method works by tokenising every article, and then copying any matching words to a separate function word corpus, adding these words to a dictionary that keeps a large string of all function words for each article. Using this separate corpus makes this type of extraction trivial.
 
 #### Classification
 
-As I previously mentioned, I decided Multinomial Naive Bayes would be most appropriate for this classification task due to its dependence on word frequencies, however for a thoughrough result, I decided to include a second classification using LinearSVC. This type of classification has strong performance on sparse data sets, such as that produced by function words, and relies less on counting probabilities, unlike MultinomialNB. Having this mix of both classifiers should reinforce my final results by allowing me to compare and contrast the outputs of each model.
+As I previously mentioned, I decided Multinomial Naive Bayes would be most appropriate for this classification task due to its dependence on word frequencies. For a thorough result, I decided to include a second classification using LinearSVC. This type of classification has strong performance on sparse data sets, such as that produced by function words, and relies less on counting probabilities, unlike MultinomialNB. Having this mix of both classifiers should reinforce my final results by allowing me to compare and contrast the outputs of each model.
 
 #### Hyper-Parameter Tuning
 
-When tuning the parameters of each model, we need a metric by which to measure performance. I used both model Accuracy and F1 score as a benchmark for model performance, allowing me to easily compare how well a model did based on its inputs. For better results, I performed tuning over a number of iterations using each model. For this, I created a function to run each classification task a set number of times, tracking the average performance over every iteration. I then repeated this over a fixed number of ngram combinations, from (1,1) to (5,5), in order to test which ngram combinations worked best for each model on which features. Taking the best ngram combinations, I then ran each model again using this range, and compiled results with model performance for comparison.
+When tuning the parameters of each model, we need a metric by which to measure performance. I used both model Accuracy and F1 score as a benchmark for model performance, allowing me to easily compare how well a model did based on its inputs. For better results, I performed tuning over a number of iterations using each model. For this, I created a function to run each classification task a set number of times, tracking the average performance over every iteration. I then repeated this over a fixed number of ngram combinations, from (1,1) to (5,5), in order to test which ngram combinations worked best for each model on which features. Taking the best ngram combinations, I then ran each model again using this range and compiled results with model performance for comparison.
 
 #### Classification Results
 
-The results of my tests proved rather unexpected. While I expected MultinomialNB to perform better in this task, in actuality I found that LinearSVC produced  more consistent results, even if the accuracy or F1 score did not reflect this. This is down to the imbalanced dataset heavily favouring Madison and Hamilton over Jay. MultinomialNB fell into the trap of predicting Madison more often than not, even with stratified data. LinearSVC was able to more accurately overlook this inherent imbalance, producing more representative results more of the time. While MultinomialNB actually produced results closer to the modern day consensus, it is hard to see these as trustworthy results, as it often blanket predicted every paper as Madison. This may seem counter intuitive, as technically it is more correct, however it is my opinion that I need to see at least some variance, for example, the co-authored articles going either way and a strong positive of Jay as paper 64, for any trust to be given to this model.
+The results of my tests proved rather unexpected. While I expected MultinomialNB to perform better in this task, in actuality, I found that LinearSVC produced more consistent results, even if the accuracy or F1 score did not reflect this. This is down to the imbalanced dataset heavily favouring Madison and Hamilton over Jay. MultinomialNB fell into the trap of predicting Madison more often than not, even with stratified data. LinearSVC was able to more accurately overlook this inherent imbalance, producing more representative results more of the time. While MultinomialNB actually produced results closer to the modern-day consensus, it is hard to see these as trustworthy results, as it often blanket-predicted every paper as Madison. This may seem counterintuitive, as technically it is more correct, but it is my opinion that I need to see at least some variance, for example, the co-authored articles going either way and a strong positive of Jay as paper 64, for any trust to be given to this model.
 
 I will now go through the most relevant results from this classification task.
 
 ##### Normal Vocabulary
 
-For a normal vocabulary, that is using the simple feature extraction method, we see the following results.
+For a normal vocabulary, that is, using the simple feature extraction method, we see the following results.
 
 **From LinearSVC:**
 Best performing N-Gram Range (4,4)
@@ -324,7 +324,7 @@ Best performing N-Gram Range (4,4)
 Best performing N-Gram Range (Accuracy) (1,2)
 *Average 92.33% Accuracy.*
 
-What is interesting about this result, is that if we use F1 score as a measure of best performing model, we get a totally different optimal N-gram range, where as with LinearSVC we get the same optimal range, however we see exactly the same prediction regardless, showing how the bias heavily affects the results.
+What is interesting about this result is that if we use the F1 score as a measure of the best-performing model, we get a totally different optimal N-gram range, whereas with LinearSVC we get the same optimal range, we see exactly the same prediction regardless, showing how the bias heavily affects the results.
 
 Best performing N-Gram Range (F1 Score) (2,2)
 *Average 85.94% F1 Score.*
@@ -347,7 +347,7 @@ Best performing N-Gram Range (F1 Score) (2,2)
 '''
 
 What can we take from these first results?
-It is important to be cautious when making deductions about the MultinomialNB results, as the data imbalance may negatively affect the legitimacy of the data. So for this case it is hard to get a reinforcement to the more reliable results from LinearSVC. Comparing the models, I can tentatively say that they agree on 10 results, most obviously Hamilton for article 64, which is interesting as we know that Jay wrote this article. This shows a clear weakness for both models due to data imbalance, so for more accurate testing, I would need to implement methods to make each author equally represented, for example by including outside works from Jay. Comparing these results to what we know today, we get an overlap of 9/14 (64.3%) for LinearSVC and 13/14 (92.8%) for MultinomialNB. Despite this, as mentioned earlier, I would take the latter with a shred of caution until proven with a more representative corpus.
+It is important to be cautious when making deductions about the MultinomialNB results, as the data imbalance may negatively affect the legitimacy of the data. So, for this case, it is hard to get a reinforcement for the more reliable results from LinearSVC. Comparing the models, I can tentatively say that they agree on 10 results, most obviously Hamilton for article 64, which is interesting as we know that Jay wrote this article. This shows a clear weakness for both models due to data imbalance, so for more accurate testing, I would need to implement methods to make each author equally represented, for example, by including outside works from Jay. Comparing these results to what we know today, we get an overlap of 9/14 (64.3%) for LinearSVC and 13/14 (92.8%) for MultinomialNB. Despite this, as mentioned earlier, I would take the latter with a shred of caution until proven with a more representative corpus.
 
 ##### Function Word Vocabulary
 
@@ -398,15 +398,15 @@ See above note on difference in N-gram performance for MultinomialNB.
 '''
 
 What can we take from these next results?
-Again here we see the bias created with MultinomialNB, but more interestingly, with function words only, LinearSVC was able to accurately and consistently correctly predict Jay for paper 64, agreeing with the modern day consensus. Again, comparing results we see an agreement of 10/14 between models, raising the same points about MultinomialNB as previously. We can also compare to the known authors, with MultinomialNB again technically being 13/14 (92.8%) and LinearSVC improving to 11/14 (78.6%). This improvement shows the power of function words in stylistic analysis.
+Again, here we see the bias created with MultinomialNB, but more interestingly, with function words only, LinearSVC was able to accurately and consistently correctly predict Jay for paper 64, agreeing with the modern-day consensus. Again, comparing results, we see an agreement of 10/14 between models, raising the same points about MultinomialNB as previously. We can also compare to the known authors, with MultinomialNB again technically being 13/14 (92.8%) and LinearSVC improving to 11/14 (78.6%). This improvement shows the power of function words in stylistic analysis.
 
 ### Conclusion
 
-Thus brings us to the temporary conclusion of this project. I would like to do more work into expanding the corpus to make it more fairly representative of each author in the future, but for now I am of the opinion I have good grounds to give my final opinion of the authorship of the federalist papers, based on the testing and results of this paper. 
+This brings us to the temporary conclusion of this project. I would like to do more work on expanding the corpus to make it more fairly representative of each author in the future, but for now, I am of the opinion that I have good grounds to give my final opinion of the authorship of the Federalist Papers, based on the testing and results of this paper.
 
-Lets take a look at the final scores in this table.
+Let's take a look at the final scores in this table.
 
-'''
+'''utf-8
      Index  Euclidean  TAD        Cosine     LSVCS     MNB_S     LSVCF     MNB_F     Accepted            AvgPred   Match
      18     MADISON    MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   6/7
      19     MADISON    MADISON   MADISON     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   7/7
@@ -444,11 +444,11 @@ And now the final scores using classification only:
      64     HAMILTON  HAMILTON  JAY       MADISON   JAY                HAMILTON  1/4
 '''
 
-What we can see here is that the classification tasks performed better on most of the data, only making two mistakes on average, however due to the unbalanced data, Jay has been misinterpreted as Hamilton. This may also be the case for article 55, which is also incorrect. However, we can see adding the statistical data corrects for paper 64, which they consistently got correct, however adds more errors in other papers. This suggests a high degree of similarity in the authors statistical writing styles for those particular metrics, adding noise to the overall results.
+What we can see here is that the classification tasks performed better on most of the data, only making two mistakes on average, due to the unbalanced data. Jay has been misinterpreted as Hamilton. This may also be the case for Article 55, which is also incorrect. However, we can see that adding the statistical data corrects for Article 64, which the statistical models consistently got correct, but adds more errors in other papers. This suggests a high degree of similarity in the authors' statistical writing styles for those particular metrics, adding noise to the overall results.
 
-Giving my own opinion on the authorship of the federalist papers, taking these results into account, I would favor the results of the classification models over that of the statistical models, however I would take the result of paper 64 as Jay from the statistical models, as they predicted with a high degree of accuracy his attribution, reinforced by one correct prediction from LinearSVC on function words. This gives me high confidence that Jay did write article 64. That then leaves a couple of tenuous results. Namely articles 49, 55, 56, which could go either way between Hamilton or Madison. If we include the statistical data, it tips all three into favor of Hamilton, which disagrees with the common accepted authorship we know today. This could be caused by a number of factors, including similarity of writing style for these particular papers, combined with inaccuracy of the statistical models in these papers (if they struggled particularly in this setting). This, then, suggests further work needs to be done for these papers in particular.
+Giving my own opinion on the authorship of the Federalist Papers, taking these results into account, I would favour the results of the classification models over those of the statistical models. I would take the result of paper 64 as Jay from the statistical models, as they predicted with a high degree of accuracy his attribution, reinforced by one correct prediction from LinearSVC on function words. This gives me high confidence that Jay did write Article 64. That then leaves a couple of tenuous results. Namely articles 49, 55, and 56, which could go either way between Hamilton and Madison. If we include the statistical data, it tips all three into favour of Hamilton, which disagrees with the commonly accepted authorship we know today. This could be caused by a number of factors, including the similarity of writing style for these particular papers, combined with the inaccuracy of the statistical models in these papers (if they struggled particularly in this setting). This, then, suggests further work needs to be done for these papers in particular.
 
-Personally, I would leave out the statistical results for these three outliers, and choose to put them in favor of Madison based on the results of the classification tasks, on the reasoning of poor performance of the statistical models on these particular models, and bias towards Hamilton in the corpus, suggesting a more unlikely accidental prediction of Madison, suggesting a stronger correlation despite unbalanced data. This is all speculation however, so proper investigation needs to be had to be certain. In conclusion, given that reasoning, my final table would look as follows:
+Personally, I would leave out the statistical results for these three outliers, and choose to put them in favour of Madison based on the results of the classification tasks, on the reasoning of poor performance of the statistical models on these particular models, and bias towards Hamilton in the corpus, suggesting a more unlikely accidental prediction of Madison, suggesting a stronger correlation despite unbalanced data. This is all speculation, however, so a proper investigation needs to be had to be certain. In conclusion, given that reasoning, my final table would look as follows:
 
 '''utf-8
      Index  Authorship
@@ -467,6 +467,8 @@ Personally, I would leave out the statistical results for these three outliers, 
      58     MADISON
      64     JAY
 '''
+
+This then agrees with the modern consensus in all articles, which shows strong performance for the methods used in this study. As previously mentioned, there are plenty of improvements that can be made with future work on this project. This should be done with the intention of firming up any tenuous predictions with more sturdy results. However, given the evidence presented and the thoroughness of my research, I am confident in my final results.
 
 ## References
 
