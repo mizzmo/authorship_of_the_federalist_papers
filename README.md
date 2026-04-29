@@ -274,6 +274,23 @@ In Naive Bayes analysis, increasing the number of features often improves predic
 
 As previously observed, using punctuation usage alone has produced inconsistent results across different topical models. By incorporating multiple features into this Bayesian analysis, it becomes possible to either support or challenge those earlier findings using a more robust and information-rich feature set.
 
+#### Feature Extraction
+
+For this task, it was necessary to define different features for use in classification. I defined two simple types of classification for this, namely simple feature extraction, which removed any non-alphabetical characters from the text, keeping stop-words, and function word extraction, which removed everything apart from function words. In most cases, function words cause noise in classification tasks, however in the case of defining authorship, they provide important stylistic information that can be used to narrow down the author of a specific paper, hence why it was important to keep them in.
+
+My function word extraction method works by tokenizing every article, and then copying any matching words to a separate function word corpus, adding these words to a dictionary that keeps a large string of all function words for each article. Using this separate corpus makes this type of extraction trivial. 
+
+#### Classification
+
+As I previously mentioned, I decided Multinomial Naive Bayes would be most appropriate for this classification task due to its dependence on word frequencies, however for a thoughrough result, I decided to include a second classification using LinearSVC. This type of classification has strong performance on sparse data sets, such as that produced by function words, and relies less on counting probabilies, unlike MultinomialNB. Having this mix of both classifiers should reinforce my final results by allowing me to compare and contrast the outputs of each model.
+
+#### Hyper-Parameter Tuning
+
+When tuning the parameters of each model, we need a metric by which to measure performance. I used both model Accuracy and F1 score as a benchmark for model performance, allowing me to easily compare how well a model did based on its inputs. For better results, I performed tuning over a number of iterations using each model. For this, I created a function to run each classification task a set number of times, tracking the average performance over every iteration. I then repeated this over a fixed number of ngram combinations, from (1,1) to (5,5), in order to test which ngram combinations worked best for each model on which features. Taking the best ngram combinations, I then ran each model again using this range, and compiled results with model performance for comparison. 
+
+#### Classification Results.
+
+
 ## References
 
 [1]Collins, J. et al. (2004) ‘Detecting Collaborations in Text Comparing the Authors’ Rhetorical Language Choices in The Federalist Papers’, Computers and the Humanities, 38(1), pp. 15–36. Available at: <https://doi.org/10.1023/B:CHUM.0000009291.06947.52>.
