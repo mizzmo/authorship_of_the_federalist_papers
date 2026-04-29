@@ -282,14 +282,123 @@ My function word extraction method works by tokenizing every article, and then c
 
 #### Classification
 
-As I previously mentioned, I decided Multinomial Naive Bayes would be most appropriate for this classification task due to its dependence on word frequencies, however for a thoughrough result, I decided to include a second classification using LinearSVC. This type of classification has strong performance on sparse data sets, such as that produced by function words, and relies less on counting probabilies, unlike MultinomialNB. Having this mix of both classifiers should reinforce my final results by allowing me to compare and contrast the outputs of each model.
+As I previously mentioned, I decided Multinomial Naive Bayes would be most appropriate for this classification task due to its dependence on word frequencies, however for a thoughrough result, I decided to include a second classification using LinearSVC. This type of classification has strong performance on sparse data sets, such as that produced by function words, and relies less on counting probabilities, unlike MultinomialNB. Having this mix of both classifiers should reinforce my final results by allowing me to compare and contrast the outputs of each model.
 
 #### Hyper-Parameter Tuning
 
-When tuning the parameters of each model, we need a metric by which to measure performance. I used both model Accuracy and F1 score as a benchmark for model performance, allowing me to easily compare how well a model did based on its inputs. For better results, I performed tuning over a number of iterations using each model. For this, I created a function to run each classification task a set number of times, tracking the average performance over every iteration. I then repeated this over a fixed number of ngram combinations, from (1,1) to (5,5), in order to test which ngram combinations worked best for each model on which features. Taking the best ngram combinations, I then ran each model again using this range, and compiled results with model performance for comparison. 
+When tuning the parameters of each model, we need a metric by which to measure performance. I used both model Accuracy and F1 score as a benchmark for model performance, allowing me to easily compare how well a model did based on its inputs. For better results, I performed tuning over a number of iterations using each model. For this, I created a function to run each classification task a set number of times, tracking the average performance over every iteration. I then repeated this over a fixed number of ngram combinations, from (1,1) to (5,5), in order to test which ngram combinations worked best for each model on which features. Taking the best ngram combinations, I then ran each model again using this range, and compiled results with model performance for comparison.
 
-#### Classification Results.
+#### Classification Results
 
+The results of my tests proved rather unexpected. While I expected MultinomialNB to perform better in this task, in actuality I found that LinearSVC produced  more consistent results, even if the accuracy or F1 score did not reflect this. This is down to the imbalanced dataset heavily favouring Madison and Hamilton over Jay. MultinomialNB fell into the trap of predicting Madison more often than not, even with stratified data. LinearSVC was able to more accurately overlook this inherent imbalance, producing more representative results more of the time. While MultinomialNB actually produced results closer to the modern day consensus, it is hard to see these as trustworthy results, as it often blanket predicted every paper as Madison. This may seem counter intuitive, as technically it is more correct, however it is my opinion that I need to see at least some variance, for example, the co-authored articles going either way and a strong positive of Jay as paper 64, for any trust to be given to this model.
+
+I will now go through the most relevant results from this classification task.
+
+##### Normal Vocabulary
+
+For a normal vocabulary, that is using the simple feature extraction method, we see the following results.
+
+**From LinearSVC:**
+Best performing N-Gram Range (4,4)
+*Average 85.33% Accuracy.*
+*Average 71.59% F1 Score.*
+
+'''utf-8
+     Paper 18 predicted author: MADISON
+     Paper 19 predicted author: MADISON
+     Paper 20 predicted author: MADISON
+     Paper 49 predicted author: HAMILTON
+     Paper 50 predicted author: MADISON
+     Paper 51 predicted author: MADISON
+     Paper 52 predicted author: MADISON
+     Paper 53 predicted author: MADISON
+     Paper 54 predicted author: HAMILTON
+     Paper 55 predicted author: HAMILTON
+     Paper 56 predicted author: HAMILTON
+     Paper 57 predicted author: MADISON
+     Paper 58 predicted author: MADISON
+     Paper 64 predicted author: HAMILTON
+'''
+
+**From MultinomialNB:**
+Best performing N-Gram Range (Accuracy) (1,2)
+*Average 92.33% Accuracy.*
+
+What is interesting about this result, is that if we use F1 score as a measure of best performing model, we get a totally different optimal N-gram range, where as with LinearSVC we get the same optimal range, however we see exactly the same prediction regardless, showing how the bias heavily affects the results.
+
+Best performing N-Gram Range (F1 Score) (2,2)
+*Average 85.94% F1 Score.*
+
+'''utf-8
+     Paper 18 predicted author: MADISON
+     Paper 19 predicted author: MADISON
+     Paper 20 predicted author: MADISON
+     Paper 49 predicted author: MADISON
+     Paper 50 predicted author: MADISON
+     Paper 51 predicted author: MADISON
+     Paper 52 predicted author: MADISON
+     Paper 53 predicted author: MADISON
+     Paper 54 predicted author: MADISON
+     Paper 55 predicted author: MADISON
+     Paper 56 predicted author: MADISON
+     Paper 57 predicted author: MADISON
+     Paper 58 predicted author: MADISON
+     Paper 64 predicted author: HAMILTON
+'''
+
+What can we take from these first results?
+It is important to be cautious when making deductions about the MultinomialNB results, as the data imbalance may negatively affect the legitimacy of the data. So for this case it is hard to get a reinforcement to the more reliable results from LinearSVC. Comparing the models, I can tentatively say that they agree on 10 results, most obviously Hamilton for article 64, which is interesting as we know that Jay wrote this article. This shows a clear weakness for both models due to data imbalance, so for more accurate testing, I would need to implement methods to make each author equally represented, for example by including outside works from Jay. Comparing these results to what we know today, we get an overlap of 9/14 (64.3%) for LinearSVC and 13/14 (92.8%) for MultinomialNB. Despite this, as mentioned earlier, I would take the latter with a shred of caution until proven with a more representative corpus.
+
+##### Function Word Vocabulary
+
+**From LinearSVC:**
+Best Performing Ngram Range (4, 5)
+*Average 87.00% Accuracy.*
+*Average 78.99% F1 Score.*
+
+'''utf-8
+     Paper 18 predicted author: MADISON
+     Paper 19 predicted author: MADISON
+     Paper 20 predicted author: MADISON
+     Paper 49 predicted author: HAMILTON
+     Paper 50 predicted author: MADISON
+     Paper 51 predicted author: MADISON
+     Paper 52 predicted author: MADISON
+     Paper 53 predicted author: MADISON
+     Paper 54 predicted author: MADISON
+     Paper 55 predicted author: HAMILTON
+     Paper 56 predicted author: MADISON
+     Paper 57 predicted author: HAMILTON
+     Paper 58 predicted author: MADISON
+     Paper 64 predicted author: JAY
+'''
+
+**From MultinomialNB:**
+Best performing N-Gram Range (Accuracy) (2,4)
+*Average 96.67% Accuracy.*
+Best performing N-Gram Range (F1 Score) (4,4)
+*Average 86.57% F1 Score.*
+See above note on difference in N-gram performance for MultinomialNB.
+
+'''utf-8
+     Paper 18 predicted author: MADISON
+     Paper 19 predicted author: MADISON
+     Paper 20 predicted author: MADISON
+     Paper 49 predicted author: MADISON
+     Paper 50 predicted author: MADISON
+     Paper 51 predicted author: MADISON
+     Paper 52 predicted author: MADISON
+     Paper 53 predicted author: MADISON
+     Paper 54 predicted author: MADISON
+     Paper 55 predicted author: MADISON
+     Paper 56 predicted author: MADISON
+     Paper 57 predicted author: MADISON
+     Paper 58 predicted author: MADISON
+     Paper 64 predicted author: MADISON
+'''
+
+What can we take from these next results?
+Again here we see the bias created with MultinomialNB, but more interestingly, with function words only, LinearSVC was able to accurately and consistently correctly predict Jay for paper 64, agreeing with the modern day consensus. Again, comparing results we see an agreement of 10/14 between models, raising the same points about MultinomialNB as previously. We can also compare to the known authors, with MultinomialNB again technically being 13/14 (92.8%) and LinearSVC improving to 11/14 (78.6%). This improvement shows the power of function words in stylistic analysis.
 
 ## References
 
