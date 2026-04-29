@@ -303,7 +303,7 @@ Best performing N-Gram Range (4,4)
 *Average 85.33% Accuracy.*
 *Average 71.59% F1 Score.*
 
-'''utf-8
+```utf-8
      Paper 18 predicted author: MADISON
      Paper 19 predicted author: MADISON
      Paper 20 predicted author: MADISON
@@ -318,7 +318,7 @@ Best performing N-Gram Range (4,4)
      Paper 57 predicted author: MADISON
      Paper 58 predicted author: MADISON
      Paper 64 predicted author: HAMILTON
-'''
+```
 
 **From MultinomialNB:**
 Best performing N-Gram Range (Accuracy) (1,2)
@@ -329,7 +329,7 @@ What is interesting about this result is that if we use the F1 score as a measur
 Best performing N-Gram Range (F1 Score) (2,2)
 *Average 85.94% F1 Score.*
 
-'''utf-8
+```utf-8
      Paper 18 predicted author: MADISON
      Paper 19 predicted author: MADISON
      Paper 20 predicted author: MADISON
@@ -344,7 +344,7 @@ Best performing N-Gram Range (F1 Score) (2,2)
      Paper 57 predicted author: MADISON
      Paper 58 predicted author: MADISON
      Paper 64 predicted author: HAMILTON
-'''
+```
 
 What can we take from these first results?
 It is important to be cautious when making deductions about the MultinomialNB results, as the data imbalance may negatively affect the legitimacy of the data. So, for this case, it is hard to get a reinforcement for the more reliable results from LinearSVC. Comparing the models, I can tentatively say that they agree on 10 results, most obviously Hamilton for article 64, which is interesting as we know that Jay wrote this article. This shows a clear weakness for both models due to data imbalance, so for more accurate testing, I would need to implement methods to make each author equally represented, for example, by including outside works from Jay. Comparing these results to what we know today, we get an overlap of 9/14 (64.3%) for LinearSVC and 13/14 (92.8%) for MultinomialNB. Despite this, as mentioned earlier, I would take the latter with a shred of caution until proven with a more representative corpus.
@@ -356,7 +356,7 @@ Best Performing Ngram Range (4, 5)
 *Average 87.00% Accuracy.*
 *Average 78.99% F1 Score.*
 
-'''utf-8
+```utf-8
      Paper 18 predicted author: MADISON
      Paper 19 predicted author: MADISON
      Paper 20 predicted author: MADISON
@@ -371,7 +371,7 @@ Best Performing Ngram Range (4, 5)
      Paper 57 predicted author: HAMILTON
      Paper 58 predicted author: MADISON
      Paper 64 predicted author: JAY
-'''
+```
 
 **From MultinomialNB:**
 Best performing N-Gram Range (Accuracy) (2,4)
@@ -380,7 +380,7 @@ Best performing N-Gram Range (F1 Score) (4,4)
 *Average 86.57% F1 Score.*
 See above note on difference in N-gram performance for MultinomialNB.
 
-'''utf-8
+```utf-8
      Paper 18 predicted author: MADISON
      Paper 19 predicted author: MADISON
      Paper 20 predicted author: MADISON
@@ -395,7 +395,7 @@ See above note on difference in N-gram performance for MultinomialNB.
      Paper 57 predicted author: MADISON
      Paper 58 predicted author: MADISON
      Paper 64 predicted author: MADISON
-'''
+```
 
 What can we take from these next results?
 Again, here we see the bias created with MultinomialNB, but more interestingly, with function words only, LinearSVC was able to accurately and consistently correctly predict Jay for paper 64, agreeing with the modern-day consensus. Again, comparing results, we see an agreement of 10/14 between models, raising the same points about MultinomialNB as previously. We can also compare to the known authors, with MultinomialNB again technically being 13/14 (92.8%) and LinearSVC improving to 11/14 (78.6%). This improvement shows the power of function words in stylistic analysis.
@@ -406,7 +406,7 @@ This brings us to the temporary conclusion of this project. I would like to do m
 
 Let's take a look at the final scores in this table.
 
-'''utf-8
+```utf-8
      Index  Euclidean  TAD        Cosine     LSVCS     MNB_S     LSVCF     MNB_F     Accepted            AvgPred   Match
      18     MADISON    MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   6/7
      19     MADISON    MADISON   MADISON     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   7/7
@@ -422,11 +422,11 @@ Let's take a look at the final scores in this table.
      57     HAMILTON   HAMILTON  HAMILTON    MADISON   MADISON   HAMILTON  MADISON   MADISON             HAMILTON  3/7
      58     HAMILTON   MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   5/7
      64     JAY        JAY       JAY         HAMILTON  HAMILTON  JAY       MADISON   JAY                 JAY       4/7
-'''
+```
 
 And now the final scores using classification only:
 
-'''utf-8
+```utf-8
      Index  LSVCS     MNB_S     LSVCF     MNB_F     Accepted           AvgPred   Match
      18     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON   MADISON   4/4
      19     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON   MADISON   4/4
@@ -442,7 +442,7 @@ And now the final scores using classification only:
      57     MADISON   MADISON   HAMILTON  MADISON   MADISON            MADISON   3/4
      58     MADISON   MADISON   MADISON   MADISON   MADISON            MADISON   4/4
      64     HAMILTON  HAMILTON  JAY       MADISON   JAY                HAMILTON  1/4
-'''
+```
 
 What we can see here is that the classification tasks performed better on most of the data, only making two mistakes on average, due to the unbalanced data. Jay has been misinterpreted as Hamilton. This may also be the case for Article 55, which is also incorrect. However, we can see that adding the statistical data corrects for Article 64, which the statistical models consistently got correct, but adds more errors in other papers. This suggests a high degree of similarity in the authors' statistical writing styles for those particular metrics, adding noise to the overall results.
 
@@ -450,7 +450,7 @@ Giving my own opinion on the authorship of the Federalist Papers, taking these r
 
 Personally, I would leave out the statistical results for these three outliers, and choose to put them in favour of Madison based on the results of the classification tasks, on the reasoning of poor performance of the statistical models on these particular models, and bias towards Hamilton in the corpus, suggesting a more unlikely accidental prediction of Madison, suggesting a stronger correlation despite unbalanced data. This is all speculation, however, so a proper investigation needs to be had to be certain. In conclusion, given that reasoning, my final table would look as follows:
 
-'''utf-8
+```utf-8
      Index  Authorship
      18     MADISON
      19     MADISON
@@ -466,7 +466,7 @@ Personally, I would leave out the statistical results for these three outliers, 
      57     MADISON
      58     MADISON
      64     JAY
-'''
+```
 
 This then agrees with the modern consensus in all articles, which shows strong performance for the methods used in this study. As previously mentioned, there are plenty of improvements that can be made with future work on this project. This should be done with the intention of firming up any tenuous predictions with more sturdy results. However, given the evidence presented and the thoroughness of my research, I am confident in my final results.
 
