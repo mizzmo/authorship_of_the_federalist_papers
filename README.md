@@ -242,16 +242,16 @@ Now i've used three different statistical methods to compare punctuation usage a
 
 ``` utf-8
      Euclidean   TAD       Cosine     Commonly Accepted
-18   MADISON     MADISON   HAMILTON   MADISON
-19   MADISON     MADISON   MADISON    MADISON
-20   MADISON     MADISON   MADISON    MADISON
+18   MADISON     MADISON   HAMILTON   MADISON/HAMILTON
+19   MADISON     MADISON   MADISON    MADISON/HAMILTON
+20   MADISON     MADISON   MADISON    MADISON/HAMILTON
 49   HAMILTON    HAMILTON  HAMILTON   MADISON
 50   MADISON     MADISON   HAMILTON   MADISON
-51   HAMILTON    HAMILTON  HAMILTON   HAMILTON
+51   HAMILTON    HAMILTON  HAMILTON   MADISON
 52   MADISON     MADISON   HAMILTON   MADISON
 53   MADISON     MADISON   MADISON    MADISON
 54   MADISON     MADISON   HAMILTON   MADISON
-55   HAMILTON    HAMILTON  HAMILTON   HAMILTON
+55   HAMILTON    HAMILTON  HAMILTON   MADISON
 56   HAMILTON    HAMILTON  HAMILTON   MADISON
 57   HAMILTON    HAMILTON  HAMILTON   MADISON
 58   HAMILTON    MADISON   HAMILTON   MADISON
@@ -399,6 +399,74 @@ See above note on difference in N-gram performance for MultinomialNB.
 
 What can we take from these next results?
 Again here we see the bias created with MultinomialNB, but more interestingly, with function words only, LinearSVC was able to accurately and consistently correctly predict Jay for paper 64, agreeing with the modern day consensus. Again, comparing results we see an agreement of 10/14 between models, raising the same points about MultinomialNB as previously. We can also compare to the known authors, with MultinomialNB again technically being 13/14 (92.8%) and LinearSVC improving to 11/14 (78.6%). This improvement shows the power of function words in stylistic analysis.
+
+### Conclusion
+
+Thus brings us to the temporary conclusion of this project. I would like to do more work into expanding the corpus to make it more fairly representative of each author in the future, but for now I am of the opinion I have good grounds to give my final opinion of the authorship of the federalist papers, based on the testing and results of this paper. 
+
+Lets take a look at the final scores in this table.
+
+'''
+     Index  Euclidean  TAD        Cosine     LSVCS     MNB_S     LSVCF     MNB_F     Accepted            AvgPred   Match
+     18     MADISON    MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   6/7
+     19     MADISON    MADISON   MADISON     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   7/7
+     20     MADISON    MADISON   MADISON     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON    MADISON   7/7
+     49     HAMILTON   HAMILTON  HAMILTON    HAMILTON  MADISON   HAMILTON  MADISON   MADISON             HAMILTON  2/7
+     50     MADISON    MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   6/7
+     51     HAMILTON   HAMILTON  HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   4/7
+     52     MADISON    MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   6/7
+     53     MADISON    MADISON   MADISON     MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   7/7
+     54     MADISON    MADISON   HAMILTON    HAMILTON  MADISON   MADISON   MADISON   MADISON             MADISON   5/7
+     55     HAMILTON   HAMILTON  HAMILTON    HAMILTON  MADISON   HAMILTON  MADISON   MADISON             HAMILTON  2/7
+     56     HAMILTON   HAMILTON  HAMILTON    HAMILTON  MADISON   MADISON   MADISON   MADISON             HAMILTON  3/7
+     57     HAMILTON   HAMILTON  HAMILTON    MADISON   MADISON   HAMILTON  MADISON   MADISON             HAMILTON  3/7
+     58     HAMILTON   MADISON   HAMILTON    MADISON   MADISON   MADISON   MADISON   MADISON             MADISON   5/7
+     64     JAY        JAY       JAY         HAMILTON  HAMILTON  JAY       MADISON   JAY                 JAY       4/7
+'''
+
+And now the final scores using classification only:
+
+'''utf-8
+     Index  LSVCS     MNB_S     LSVCF     MNB_F     Accepted           AvgPred   Match
+     18     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON   MADISON   4/4
+     19     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON   MADISON   4/4
+     20     MADISON   MADISON   MADISON   MADISON   MADISON/HAMILTON   MADISON   4/4
+     49     HAMILTON  MADISON   HAMILTON  MADISON   MADISON            MADISON   2/4
+     50     MADISON   MADISON   MADISON   MADISON   MADISON            MADISON   4/4
+     51     MADISON   MADISON   MADISON   HAMILTON  MADISON            MADISON   1/4
+     52     MADISON   MADISON   MADISON   MADISON   MADISON            MADISON   4/4
+     53     MADISON   MADISON   MADISON   MADISON   MADISON            MADISON   4/4
+     54     HAMILTON  MADISON   MADISON   MADISON   MADISON            MADISON   3/4
+     55     HAMILTON  MADISON   HAMILTON  MADISON   MADISON            MADISON   2/4
+     56     HAMILTON  MADISON   MADISON   HAMILTON  MADISON            MADISON   2/4
+     57     MADISON   MADISON   HAMILTON  MADISON   MADISON            MADISON   3/4
+     58     MADISON   MADISON   MADISON   MADISON   MADISON            MADISON   4/4
+     64     HAMILTON  HAMILTON  JAY       MADISON   JAY                HAMILTON  1/4
+'''
+
+What we can see here is that the classification tasks performed better on most of the data, only making two mistakes on average, however due to the unbalanced data, Jay has been misinterpreted as Hamilton. This may also be the case for article 55, which is also incorrect. However, we can see adding the statistical data corrects for paper 64, which they consistently got correct, however adds more errors in other papers. This suggests a high degree of similarity in the authors statistical writing styles for those particular metrics, adding noise to the overall results.
+
+Giving my own opinion on the authorship of the federalist papers, taking these results into account, I would favor the results of the classification models over that of the statistical models, however I would take the result of paper 64 as Jay from the statistical models, as they predicted with a high degree of accuracy his attribution, reinforced by one correct prediction from LinearSVC on function words. This gives me high confidence that Jay did write article 64. That then leaves a couple of tenuous results. Namely articles 49, 55, 56, which could go either way between Hamilton or Madison. If we include the statistical data, it tips all three into favor of Hamilton, which disagrees with the common accepted authorship we know today. This could be caused by a number of factors, including similarity of writing style for these particular papers, combined with inaccuracy of the statistical models in these papers (if they struggled particularly in this setting). This, then, suggests further work needs to be done for these papers in particular.
+
+Personally, I would leave out the statistical results for these three outliers, and choose to put them in favor of Madison based on the results of the classification tasks, on the reasoning of poor performance of the statistical models on these particular models, and bias towards Hamilton in the corpus, suggesting a more unlikely accidental prediction of Madison, suggesting a stronger correlation despite unbalanced data. This is all speculation however, so proper investigation needs to be had to be certain. In conclusion, given that reasoning, my final table would look as follows:
+
+'''utf-8
+     Index  Authorship
+     18     MADISON
+     19     MADISON
+     20     MADISON
+     49     MADISON
+     50     MADISON
+     51     MADISON
+     52     MADISON
+     53     MADISON
+     54     MADISON
+     55     MADISON
+     56     MADISON
+     57     MADISON
+     58     MADISON
+     64     JAY
+'''
 
 ## References
 
