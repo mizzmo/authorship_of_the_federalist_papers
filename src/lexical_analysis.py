@@ -1,9 +1,4 @@
-# Measuring For:
-# Average number of words per sentence
-# Sentence Length and Variation
-# Lexical Diversity
-# Analyse the percentage chance that each author uses a specific type of punctuation.
-# Can test for only Function words and All Words to see if there is a difference.
+
 import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -89,9 +84,7 @@ def process_sentences(article):
     # Normalize the punctuation data by dividing by the total number of words in the article.
     for key, value in output_punctuation.items():
         output_punctuation[key] = value / word_count
-    
-    #print(output_punctuation)
-    
+        
     return output_array, output_punctuation
                 
 
@@ -244,9 +237,6 @@ def main():
 
     total_averages, disputed_averages = format_averages(average_words, author_dict)
     total_punctuation, disputed_punctuation = format_punctuation(punctuation_per_article, author_dict)
-    # Plot the average data in a bar graph.
-    #plot_averages(total_averages, disputed_averages)
-    #plot_punctuation(total_punctuation, disputed_punctuation)
     
     # Euclidean Distance
     euclidean_values = euclidean_distance(total_punctuation, disputed_punctuation)
@@ -293,10 +283,5 @@ def main():
     with open('src/punc_graphs/total_absolute_difference.txt', 'w') as f:
         f.write(df_comparison.to_string())
         
-
-main()
-
-# TODO Need to normalize the data as it means nothing in the current context.
-# TODO Normalize punctuation by dividing each data point by the number of words in the associated sentence. This gets a more fair comparison between sentences.
-# TODO Use Euclidean Distance and Cosine Similarity to compare data between authors. Doing this gets a more useful distance score for comparison.
-# TODO Visualize the data using Principal Component Analysis (PCA) to get a better grasp of where the data falls when in 2D space.
+if __name__ == "__main__":
+    main()
