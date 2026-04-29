@@ -3,7 +3,7 @@ from classification import multinomial_cl
 from feature_extraction import simple_feature_extraction
 from feature_extraction import function_words_extraction
 
-def ngram_turning(classification_func):
+def ngram_turning(classification_func, cleaned_articles, author_dict, ngram_lower, ngram_upper):
     # Range of N-Grams, 1-5. Every combination to see best result.
     best_f1 = 0
     best_lower = 0
@@ -14,7 +14,7 @@ def ngram_turning(classification_func):
                 continue
             else:
                 print(f"Testing range {lower_bound} to {upper_bound}.")
-                f1 = average_performance(classification_func, cleaned_articles, author_dict, lower_bound, upper_bound)
+                f1 = average_performance(classification_func, cleaned_articles, author_dict, ngram_lower, ngram_upper)
                 if f1 > best_f1:
                     best_f1 = f1
                     best_lower = lower_bound
